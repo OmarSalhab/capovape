@@ -1,0 +1,38 @@
+"use client";
+
+
+import Link from "next/link";
+
+
+export function Navbar() {
+	
+
+	const navigation = [
+		{ name: "Home", href: "/" },
+		{ name: "Brands", href: "#Brand" },
+		{ name: "About", href: "#about" },
+		{ name: "Contact Us", href: "#contact" },
+	];
+
+	return (
+		<nav className="container mx-auto px-4">
+			<div className="hidden md:flex md:items-center md:h-16 md:justify-around">
+				{/* Desktop Navigation */}
+				<div className="hidden md:flex md:items-center md:gap-12">
+					{navigation.map((item) => (
+						<Link
+							key={item.name}
+							href={item.href}
+							className="font-serif text-gray-400 hover:text-foreground transition-colors font-medium text-lg uppercase"
+						>
+							{item.name}
+						</Link>
+					))}
+					
+				</div>
+			</div>
+
+			
+		</nav>
+	);
+}
