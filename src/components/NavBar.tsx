@@ -1,12 +1,6 @@
-"use client";
-
-
 import Link from "next/link";
 
-
 export function Navbar() {
-	
-
 	const navigation = [
 		{ name: "Home", href: "/" },
 		{ name: "Brands", href: "#Brand" },
@@ -23,16 +17,13 @@ export function Navbar() {
 						<Link
 							key={item.name}
 							href={item.href}
-							className="font-serif text-gray-400 hover:text-foreground transition-colors font-medium text-lg uppercase"
+							className="font-serif text-muted-foreground hover:text-foreground transition-colors font-medium text-lg uppercase"
 						>
 							{item.name}
 						</Link>
 					))}
-					
 				</div>
 			</div>
-
-			
 		</nav>
 	);
 }

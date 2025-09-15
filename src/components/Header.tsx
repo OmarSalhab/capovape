@@ -16,7 +16,7 @@ const Navigation = () => {
 		{ name: "Contact Us", href: "#contact" },
 	];
 	return (
-		<header className=" border-b border-border py-4 ">
+		<header className=" border-b border-border py-4 px-6 md:py-4 ">
 			<div className="container mx-auto px-4">
 				<div className="flex justify-between items-center ">
 					{/* Logo */}
@@ -41,14 +41,15 @@ const Navigation = () => {
 							className="text-foreground "
 						>
 							{isOpen ? (
-								<X className="h-8 w-8" />
+								<X className="h-7 w-7" />
 							) : (
-								<Menu className="h-8 w-8" />
+								<Menu className="h-7 w-7" />
 							)}
 						</button>
 					</div>
 				</div>
 			</div>
+			
 			{/* Mobile Navigation */}
 			{isOpen && (
 				<div className="md:hidden flex flex-col gap-2">
@@ -67,7 +68,7 @@ const Navigation = () => {
 							<Link
 								key={item.name}
 								href={item.href}
-								className="block px-3 py-2 text-gray-900 font-serif font-semibold transition-colors text-[14px] uppercase"
+								className="block px-3 py-2 text-mafia-black font-serif font-semibold transition-colors text-[14px] uppercase"
 								onClick={() => setIsOpen(false)}
 							>
 								{item.name}

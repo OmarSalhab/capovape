@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "./ui/button";
 import Image from "next/image";
 
 const HeroSlider = () => {
@@ -37,7 +36,7 @@ const HeroSlider = () => {
 
 	return (
 		<section className="relative ">
-			<div className="slider-container  relative overflow-hidden rounded-xl border border-border">
+			<div className="slider-container relative overflow-hidden rounded-xl border border-border">
 				<div className="relative overflow-hidden">
 					<div
 						className="flex transition-transform duration-700 ease-in-out"

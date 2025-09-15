@@ -1,6 +1,7 @@
+import AboutSection from "@/components/AboutSection";
+import BrandsSection from "@/components/BrandsSection";
 import HeroSlider from "@/components/HeroSlider";
 import Head from "next/head";
-
 
 export default function Home() {
 	return (
@@ -49,6 +50,8 @@ export default function Home() {
 
 			<main className="">
 				<HeroSlider />
+				<BrandsSection />
+				<AboutSection />
 			</main>
 		</div>
 	);

@@ -11,7 +11,7 @@
 	--popover-foreground: 40 20% 92%;
 
 	/* Golden luxury accents */
-	--primary: 45 85% 65%;
+	--primary: 40 90% 57%;
 	--primary-foreground: 0 0% 8%;
 
 	--secondary: 0 0% 18%;
@@ -92,6 +92,9 @@
 	--color-primary: hsl(var(--primary));
 	--color-border: hsl(var(--border));
 	--color-mafia-gray: hsl(var(--mafia-gray));
+	--color-mafia-black: hsl(var(--mafia-black));
+	--color-mafia-dark: hsl(var(--mafia-dark));
+	--color-muted-foreground: hsl(var(--muted-foreground));
 }
 
 @media (prefers-color-scheme: dark) {
