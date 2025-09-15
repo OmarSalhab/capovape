@@ -1,5 +1,6 @@
+import HeroSlider from "@/components/HeroSlider";
 import Head from "next/head";
-import Image from "next/image";
+
 
 export default function Home() {
 	return (
@@ -28,10 +29,7 @@ export default function Home() {
 				/>
 				<meta property="og:url" content="https://capovape.ca" />
 				<meta property="og:type" content="website" />
-				<meta
-					property="og:image"
-					content="/capovape-logo.jpg"
-				/>
+				<meta property="og:image" content="/capovape-logo.jpg" />
 
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta charSet="UTF-8" />
@@ -46,14 +44,11 @@ export default function Home() {
 					name="twitter:description"
 					content="Discover CapoVape Canada’s premium vapes, pods, e-liquids, and accessories. Shop now for the best vaping experience."
 				/>
-				<meta
-					name="twitter:image"
-					content="/capovape-logo.jpg"
-				/>
+				<meta name="twitter:image" content="/capovape-logo.jpg" />
 			</Head>
 
 			<main className="">
-				
+				<HeroSlider />
 			</main>
 		</div>
 	);
