@@ -1,4 +1,5 @@
-import { Instagram, Phone, Mail, MapPin } from "lucide-react";
+import { Instagram } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
 	return (
@@ -10,17 +11,11 @@ export default function Footer() {
 					{" "}
 					<div className="flex items-center gap-3">
 						{" "}
-						<div className="w-8 h-8 rounded-full bg-[#141414] border border-[#3a2f15] grid place-items-center">
-							🎩
-						</div>{" "}
-						<div
-							className="font-mafia text-lg tracking-widest"
-							style={{ color: "gold" }}
-						>
-							CAPO VAPE
-						</div>{" "}
+						<Image src="/favicon.ico" alt="Capo Logo" width={100} height={70} />
 					</div>{" "}
-					<p className="mt-3 text-sm mb-4">Premium devices. No-nonsense service.</p>{" "}
+					<p className="mt-3 text-sm mb-4">
+						Premium devices. No-nonsense service.
+					</p>{" "}
 					<div className="flex space-x-4">
 						<a
 							href="https://www.instagram.com/capovape.ca"

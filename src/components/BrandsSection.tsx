@@ -39,6 +39,7 @@ export default function BrandsSection() {
 								href={href}
 								className="group relative"
 								aria-label={label}
+								prefetch={true}
 							>
 								<div
 									className="aspect-square rounded-full p-[2px] transition-transform duration-300 group-hover:scale-[1.03]"

@@ -7,7 +7,7 @@ export default function Compliance() {
 			{" "}
 			<div className="mx-auto max-w-6xl px-4">
 				{" "}
-				<div className="rounded-xl border border-[#3a2f15] bg-black/80 p-4 text-sm text-[#F4EDE0]/90">
+				<div className="rounded-xl border border-[#3a2f15] bg-black/80 p-4 text-xs sm:text-sm text-[#F4EDE0]/90">
 					{" "}
 					<p>
 						<span className="text-[#C5A66A] font-semibold">

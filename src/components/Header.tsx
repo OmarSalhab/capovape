@@ -55,7 +55,14 @@ const Navigation = () => {
 				<div className="container mx-auto px-4">
 					<div className="flex justify-between items-center ">
 						{/* Logo */}
-						<Image src="/favicon.ico" alt="Capo Logo" width={120} height={70} />
+						<Link href="/">
+							<Image
+								src="/favicon.ico"
+								alt="Capo Logo"
+								width={120}
+								height={70}
+							/>
+						</Link>
 
 						{/* Search Bar */}
 						<div className="hidden md:block md:search-bar md:relative md:bg-muted md:border focus-within:border-b-red-600  md:rounded-full md:w-full md:max-w-md md:px-4 md:py-2">
@@ -116,7 +123,7 @@ const Navigation = () => {
 			</header>
 			{scrolled ? (
 				<Link href="#header" className="">
-					<div className="flex justify-center items-center fixed bottom-3 right-3 min-w-10 min-h-10 bg-mafia rounded-md">
+					<div className="flex justify-center items-center fixed bottom-10 right-3 min-w-10 min-h-10 pt-2 bg-mafia rounded-md">
 						<ArrowUpIcon className="w-5 h-5 text-black animate-bounce" />{" "}
 					</div>
 				</Link>
