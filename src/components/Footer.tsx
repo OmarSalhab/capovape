@@ -1,74 +1,100 @@
-import { Instagram, Phone, Mail, MapPin } from 'lucide-react';
+import { Instagram, Phone, Mail, MapPin } from "lucide-react";
 
 export default function Footer() {
-  return (
-    <footer id='contact' className="bg-black border-t border-white/20 py-16 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-12">
-          {/* Brand */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-serif font-bold text-primary">CapoVape Toronto</h3>
-            <p className="text-gray-300 leading-relaxed font-light">
-              Experience premium shisha meets cozy, social atmosphere. Where luxury hookah culture comes to life in the heart of Scarborough.
-            </p>
-            <div className="flex space-x-4">
-              <a 
-                href="https://www.instagram.com/capovape.ca" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-mafia-gray hover:bg-white/30 p-3 transition-colors border border-white"
-              >
-                <Instagram size={24} className="text-primary" />
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Contact */}
-          <div className="space-y-6">
-            <h4 className="text-xl font-semibold text-primary">Quick Contact</h4>
-            <div className="space-y-4">
-              <a href="tel:+16478099552" className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
-                <Phone size={20} />
-                <span>+1 647-809-9552</span>
-              </a>
-              <a href="mailto:Moonloungetoronto@gmail.com" className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors">
-                <Mail size={20} />
-                <span>capovape@gmail.com</span>
-              </a>
-              <div className="flex items-start space-x-3 text-gray-300">
-                <MapPin size={20} className="mt-1 flex-shrink-0" />
-                <span>1851 Lawrence Avenue East, Toronto, Ontario M1R 2Y3</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Hours */}
-          <div className="space-y-6">
-            <h4 className="text-xl font-semibold text-primary">Hours</h4>
-            <div className="space-y-2 text-gray-300 font-light">
-              <div className="flex justify-between">
-                <span>Wed–Thu</span>
-                <span>3pm–2am</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Fri–Sat</span>
-                <span>5pm–3am</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Sun–Tue</span>
-                <span>3pm–2am</span>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center">
-          <p className="text-gray-400">
-            © 2025 Solvenear. All rights Reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
+	return (
+		<footer className="mt-10 border-t border-[#1d1a12] bg-black">
+			{" "}
+			<div className="mx-auto max-w-6xl px-4 py-10 grid md:grid-cols-4 gap-8 text-[#F4EDE0]/80">
+				{" "}
+				<div>
+					{" "}
+					<div className="flex items-center gap-3">
+						{" "}
+						<div className="w-8 h-8 rounded-full bg-[#141414] border border-[#3a2f15] grid place-items-center">
+							🎩
+						</div>{" "}
+						<div
+							className="font-mafia text-lg tracking-widest"
+							style={{ color: "gold" }}
+						>
+							CAPO VAPE
+						</div>{" "}
+					</div>{" "}
+					<p className="mt-3 text-sm mb-4">Premium devices. No-nonsense service.</p>{" "}
+					<div className="flex space-x-4">
+						<a
+							href="https://www.instagram.com/capovape.ca"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="bg-mafia-gray hover:bg-white/30 p-3 transition-colors border border-white"
+						>
+							<Instagram size={20} className="text-primary" />
+						</a>
+					</div>
+				</div>{" "}
+				<div>
+					{" "}
+					<h4 className="text-[#C5A66A] font-mafia tracking-wider">
+						Shop
+					</h4>{" "}
+					<ul className="mt-3 space-y-2 text-sm">
+						{" "}
+						<li>
+							<a className="hover:text-[#C5A66A]" href="#">
+								All Products
+							</a>
+						</li>{" "}
+						<li>
+							<a className="hover:text-[#C5A66A]" href="#">
+								Pods
+							</a>
+						</li>{" "}
+						<li>
+							<a className="hover:text-[#C5A66A]" href="#">
+								Disposables
+							</a>
+						</li>{" "}
+					</ul>{" "}
+				</div>{" "}
+				<div>
+					{" "}
+					<h4 className="text-[#C5A66A] font-mafia tracking-wider">
+						Info
+					</h4>{" "}
+					<ul className="mt-3 space-y-2 text-sm">
+						{" "}
+						<li>
+							<a className="hover:text-[#C5A66A]" href="#contact">
+								Find Us
+							</a>
+						</li>{" "}
+						<li>
+							<a className="hover:text-[#C5A66A]" href="#">
+								Age Verification
+							</a>
+						</li>{" "}
+						<li>
+							<a className="hover:text-[#C5A66A]" href="#">
+								Returns
+							</a>
+						</li>{" "}
+					</ul>{" "}
+				</div>{" "}
+				<div id="contact">
+					{" "}
+					<h4 className="text-[#C5A66A] font-mafia tracking-wider">
+						Contact
+					</h4>{" "}
+					<p className="mt-3 text-sm">
+						1851 Lawrence Avenue East, Scarborough, ON
+					</p>{" "}
+					<p className="text-sm">(416) 555-0123</p>{" "}
+					<p className="text-sm">support@capovape.ca</p>{" "}
+				</div>{" "}
+			</div>{" "}
+			<div className="py-4 text-center text-xs text-[#F4EDE0]/60">
+				© {new Date().getFullYear()} CAPO VAPE — All rights reserved.
+			</div>{" "}
+		</footer>
+	);
 }

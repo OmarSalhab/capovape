@@ -1,4 +1,5 @@
-import BrandCard from "./BrandCard";
+import Image from "next/image";
+import Link from "next/link";
 
 const Brands = [
 	{ id: "allo", image: "/ALLO_Logo-410x205_500x.png" },
@@ -9,10 +10,70 @@ const Brands = [
 ];
 export default function BrandsSection() {
 	return (
-		<div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-0.5  bg-mafia-dark py-6 px-2">
-			{Brands.map((brand, idx) => {
-				return <BrandCard key={idx} brand={brand} />;
-			})}
-		</div>
+		<section
+			id="brands"
+			className="relative py-12 md:py-16"
+			style={{
+				background: `radial-gradient(600px 220px at 20% -10%, rgba(197,166,106,0.05), transparent),
+	radial-gradient(500px 260px at 80% 0%, rgba(197,166,106,0.07), transparent)`,
+			}}
+		>
+			<div className="mx-auto max-w-6xl px-4">
+				<h2 className="text-center text-xl md:text-3xl tracking-[0.25em] text-[#C5A66A] ">
+					MADE MEN BRANDS
+				</h2>
+				<p className="mt-2 text-center text-muted-foreground text-sm md:text-md">
+					Trusted labels curated by CAPO
+				</p>
+
+				<div className="mt-8 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-5 md:gap-6">
+					{Brands.map((brand) => {
+						// link to the brand route (e.g. /allo)
+						const href = `/${brand.id}`;
+						const label = brand.id
+							.replace(/[-_]/g, " ")
+							.replace(/\b\w/g, (c) => c.toUpperCase());
+						return (
+							<Link
+								key={brand.id}
+								href={href}
+								className="group relative"
+								aria-label={label}
+							>
+								<div
+									className="aspect-square rounded-full p-[2px] transition-transform duration-300 group-hover:scale-[1.03]"
+									style={{
+										background:
+											"conic-gradient(from 180deg, #C5A66A, #8f753f, #C5A66A)",
+										boxShadow:
+											"0 0 0 1px rgba(197,166,106,0.35), 0 6px 22px rgba(0,0,0,0.45)",
+									}}
+								>
+									<div className="rounded-full h-full w-full bg-black/80 grid place-items-center border border-[#3a2f15]">
+										<Image
+											src={brand.image}
+											alt={label}
+											width={160}
+											height={80}
+											className="w-20 h-20 object-contain opacity-90 group-hover:opacity-100 transition mix-blend-screen"
+										/>
+									</div>
+								</div>
+								<div className="mt-3 text-center text-[#F4EDE0] text-sm tracking-wide opacity-90 group-hover:opacity-100">
+									{label}
+								</div>
+								<div
+									className="absolute -inset-2 -z-10 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-30"
+									style={{
+										background:
+											"radial-gradient(40% 40% at 50% 50%, #C5A66A, transparent)",
+									}}
+								></div>
+							</Link>
+						);
+					})}
+				</div>
+			</div>
+		</section>
 	);
 }

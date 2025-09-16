@@ -3,10 +3,10 @@ export default function AboutSection() {
 		<section id="about" className="py-16 md:py-24 bg-mafia-black">
 			<div className="container mx-auto px-4">
 				<div className="max-w-4xl mx-auto text-center">
-					<h2 className="text-3xl md:text-5xl font-mafia font-bold text-gradient mb-8">
+					<h2 className="text-xl font-mafia text-gradient mb-8 text-left md:text-3xl tracking-[0.25em] text-[#C5A66A] uppercase">
 						About CapoVape
 					</h2>
-					<div className="space-y-6 text-lg text-muted-foreground">
+					<div className="space-y-6 text-md md:text-lg text-muted-foreground text-left">
 						<p>
 							Welcome to VapeEmpire, where luxury meets excellence in the world
 							of premium vaping. We built our reputation on providing only

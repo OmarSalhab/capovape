@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Import fonts: Cinzel for titles, Inter for body */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap');
 
 :root {
 	--background: 0 0% 8%;
@@ -86,7 +88,10 @@
 @theme inline {
 	--color-background: hsl(var(--background));
 	--color-foreground: hsl(var(--foreground));
-	--font-sans: var(--font-geist-sans);
+	/* Font variables used across the app */
+	--font-cinzel: 'Cinzel', serif;
+	--font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	--font-sans: var(--font-inter);
 	--font-mono: var(--font-geist-mono);
 	--color-mafia: hsl(var(--mafia-gold));
 	--color-primary: hsl(var(--primary));
@@ -112,5 +117,21 @@
 body {
 	background: var(--background);
 	color: var(--foreground);
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: var(--font-inter);
+}
+
+/* Headings use Cinzel (primary/title font). Ensure utility classes using font-serif map to Cinzel */
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-cinzel);
+	letter-spacing: 0.02em;
+}
+
+/* Keep the existing utility class `.font-serif` working consistently */
+.font-serif {
+	font-family: var(--font-cinzel) !important;
+}
+
+/* Body text / paragraphs use Inter */
+p, span, li, a, label {
+	font-family: var(--font-inter);
 }

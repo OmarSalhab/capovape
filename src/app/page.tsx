@@ -1,5 +1,7 @@
 import AboutSection from "@/components/AboutSection";
+import AgeGate from "@/components/AgeGate";
 import BrandsSection from "@/components/BrandsSection";
+import Hero from "@/components/Hero";
 import HeroSlider from "@/components/HeroSlider";
 import Head from "next/head";
 
@@ -50,8 +52,10 @@ export default function Home() {
 
 			<main className="">
 				<HeroSlider />
+				<Hero/>
 				<BrandsSection />
 				<AboutSection />
+				<AgeGate/>
 			</main>
 		</div>
 	);

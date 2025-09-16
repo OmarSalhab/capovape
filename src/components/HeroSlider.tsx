@@ -9,11 +9,12 @@ const HeroSlider = () => {
 	const slides = [
 		{
 			id: 1,
-			image: "/ALLO_SYNC_NOV2023_allo.ca_Available_Now_Mobile_Banner_750x970_bbf72983-cae7-419a-8881-9b675c52a98c_800x.png",
+			image:
+				"/nic_warning_mobile_4dee37ea-ec44-4c94-8e32-82958de204d5.png",
 		},
 		{
 			id: 2,
-			image: "/Allo-Subscription-BC-APR2025-WebBanner-Mobile-750x970_800x.png",
+			image: "/nic_warning_mobile_4dee37ea-ec44-4c94-8e32-82958de204d5.png",
 		},
 		{
 			id: 3,
@@ -45,14 +46,19 @@ const HeroSlider = () => {
 						{slides.map((slide) => (
 							<div
 								key={slide.id}
-								className="slider-item w-full flex-shrink-0 max-h-72"
+								className="slider-item w-full flex-shrink-0 max-h-52"
 							>
-								<Image
+								{/* <Image
 									src={slide.image}
 									alt="offers"
 									width={300}
 									height={288}
 									className="object-fit h-72 w-full"
+								/> */}
+								<img
+									src={slide.image}
+									alt="offers"
+									className="w-full h-full object-fit object-center opacity-90"
 								/>
 							</div>
 						))}
