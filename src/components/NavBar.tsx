@@ -3,7 +3,7 @@ import Link from "next/link";
 export function Navbar() {
 	const navigation = [
 		{ name: "Home", href: "/" },
-		{ name: "Brands", href: "/#Brands" },
+		{ name: "Brands", href: "/#brands" },
 		{ name: "About", href: "/#about" },
 		{ name: "Contact Us", href: "/#contact" },
 	];

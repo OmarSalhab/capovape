@@ -20,7 +20,7 @@ export default function VapeCard({
 			className="group rounded-md overflow-hidden shadow-lg"
 		>
 			<div
-				className="aspect-square overflow-hidden border border-[#222]"
+				className="aspect-[4/5] overflow-hidden border border-[#222]"
 				style={{
 					background:
 						"linear-gradient(135deg, rgba(45,10,10,1) 0%, rgba(45,10,10,1) 50%, rgba(10,10,10,1) 50%, rgba(10,10,10,1) 100%)",
@@ -49,11 +49,11 @@ export default function VapeCard({
 			</div>
 
 			<div className="mt-3 px-1">
-				<h3 className="text-xl font-cinzel tracking-wide text-[var(--color-mafia)] uppercase text-wrap overflow-ellipsis">
+				<h3 className="text-sm sm:text-lg font-cinzel tracking-wide text-[var(--color-mafia)] uppercase text-wrap overflow-ellipsis">
 					{vape.title}
 				</h3>
 				<div className="mt-2 flex items-center justify-between">
-					<div className="text-md sm:text-lg text-white font-medium font-serif">
+					<div className="text-sm sm:text-md sm:text-lg text-gray-100 font-medium font-serif">
 						{vape.price}
 					</div>
 				</div>

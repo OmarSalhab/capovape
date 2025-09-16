@@ -52,12 +52,12 @@ export default function VapeDetail({ params }: { params: Promise<{ id: string; b
   return (
     <section className="py-12">
       <div className="mx-auto max-w-6xl px-4">
-        <Link href={`/${brand}`} className="text-sm text-muted-foreground underline">&larr; Back to {brand}</Link>
+        <Link href={`/${brand}`} className="text-sm md:text-md text-muted-foreground underline">&larr; Back to {brand}</Link>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-20 items-start">
           <div className="w-full">
-            <div className="w-full bg-black/60 rounded-md p-4 flex items-center justify-center">
-              <Image src={vape.image} alt={vape.title} width={640} height={640} className="object-contain max-h-[70vh]" />
+            <div className="w-full bg-black/60 rounded-md  flex items-center justify-center">
+              <Image src={vape.image} alt={vape.title} width={640} height={640} className="object-fill max-h-[70vh]" />
             </div>
           </div>
 

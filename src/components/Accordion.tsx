@@ -23,9 +23,9 @@ export default function Accordion({ items }: { items: AccordionItem[] }) {
               onClick={() => setOpen(isOpen ? null : it.id)}
               className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-[#F4EDE0]"
             >
-              <span className="font-serif text-[var(--color-mafia)]">{it.title}</span>
+              <span className="font-serif text-[var(--color-mafia)] md:text-lg">{it.title}</span>
               <svg
-                className={`w-5 h-5 transition-transform duration-200 ${isOpen ? "rotate-45" : "rotate-0"}`}
+                className={`w-6 h-6 transition-transform duration-200 ${isOpen ? "rotate-45" : "rotate-0"}`}
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@ export default function Accordion({ items }: { items: AccordionItem[] }) {
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.28 }}
-                  className="px-4 pb-4 text-sm text-muted-foreground"
+                  className="px-4 pb-4 text-sm md:text-md text-muted-foreground"
                   style={{ overflow: "hidden" }}
                 >
                   <div className="pt-2">{it.content}</div>
