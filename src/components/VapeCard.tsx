@@ -2,8 +2,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import type { Vape } from "./BrandVapeGrid";
 
+type Vape = {
+	id: string;
+	title: string;
+	price: string;
+	image: string;
+	desc: string | undefined;
+	inStock: boolean;
+};
 export default function VapeCard({
 	vape,
 	brand,

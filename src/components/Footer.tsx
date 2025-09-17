@@ -88,7 +88,7 @@ export default function Footer() {
 				</div>{" "}
 			</div>{" "}
 			<div className="py-4 text-center text-xs text-[#F4EDE0]/60">
-				© {new Date().getFullYear()} CAPO VAPE — All rights reserved.
+				© {new Date().getFullYear()} SOLVENEAR — All rights reserved.
 			</div>{" "}
 		</footer>
 	);

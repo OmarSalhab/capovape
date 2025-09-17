@@ -10,15 +10,15 @@ const HeroSlider = () => {
 		{
 			id: 1,
 			image:
-				"/nic_warning_mobile_4dee37ea-ec44-4c94-8e32-82958de204d5.png",
+				"/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
 		},
 		{
 			id: 2,
-			image: "/nic_warning_mobile_4dee37ea-ec44-4c94-8e32-82958de204d5.png",
+			image: "/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
 		},
 		{
 			id: 3,
-			image: "/nic_warning_mobile_4dee37ea-ec44-4c94-8e32-82958de204d5.png",
+			image: "/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
 		},
 	];
 
@@ -58,7 +58,7 @@ const HeroSlider = () => {
 								<img
 									src={slide.image}
 									alt="offers"
-									className="w-full h-full object-fit object-center opacity-90"
+									className="w-full h-full object-contain object-center opacity-60"
 								/>
 							</div>
 						))}

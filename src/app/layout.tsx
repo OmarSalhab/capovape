@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next"
-import { Geist, Geist_Mono,Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import {  Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Header";
@@ -28,13 +28,11 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body
-				className={`${inter.variable} ${geistMono.variable} antialiased`}
-			>
-				<Navigation/>
+			<body className={`${inter.variable} ${geistMono.variable} antialiased`}>
+				<Navigation />
 				{children}
-				<Footer/>
-        <Analytics/>
+				<Footer />
+				<Analytics />
 			</body>
 		</html>
 	);

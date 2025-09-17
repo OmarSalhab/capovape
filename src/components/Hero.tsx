@@ -62,8 +62,7 @@ export default function Hero() {
 						<img
 							src="/favicon.ico"
 							alt="Capo Vape showcase"
-                            
-							className="w-full h-full object-cover object-center opacity-90"
+							className="w-full h-full object-cover object-center opacity-90 p-5"
 						/>
 					</div>
 					{/* Soft spotlight */}

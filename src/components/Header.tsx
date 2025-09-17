@@ -11,7 +11,7 @@ const Navigation = () => {
 
 	const navigation = [
 		{ name: "Home", href: "/" },
-		{ name: "Brands", href: "/#Brands" },
+		{ name: "Brands", href: "/#brands" },
 		{ name: "About", href: "/#about" },
 		{ name: "Contact Us", href: "/#contact" },
 	];
@@ -56,11 +56,12 @@ const Navigation = () => {
 					<div className="flex justify-between items-center ">
 						{/* Logo */}
 						<Link href="/">
-							<Image
+							<img
 								src="/favicon.ico"
 								alt="Capo Logo"
 								width={120}
 								height={70}
+								
 							/>
 						</Link>
 
