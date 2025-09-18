@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 
 interface Product {
 	title: string;
@@ -269,12 +270,24 @@ export default function CreateModal({
 									const data = await res.json();
 									console.log("[upload result]", data);
 									if (data.ok) {
-										setNewProduct({
-											...newProduct,
+										// If there was a previous temporary upload, delete it from R2 now
+										if (tempUploadedKey && tempUploadedKey !== data.key) {
+											try {
+												await fetch("/api/admin/r2/delete", {
+													method: "POST",
+													headers: { "Content-Type": "application/json" },
+													body: JSON.stringify({ key: tempUploadedKey }),
+												});
+											} catch (err) {
+												console.error("Failed to delete previous temp upload", err);
+											}
+										}
+										// update product image and set new temp key
+										setNewProduct((prev) => ({
+											...prev,
 											image: data.publicUrl,
 											imageKey: data.key,
-										});
-										// remember temporary uploaded key so we can delete it if user cancels
+										}));
 										setTempUploadedKey(data.key);
 									} else {
 										alert("Upload failed: " + (data.error || ""));
@@ -294,10 +307,12 @@ export default function CreateModal({
 						)}
 						{newProduct.image && (
 							<div className="mt-3">
-								<img
+								<Image
 									src={newProduct.image}
 									alt="preview"
-									className="object-contain max-w-[220px] max-h-[220px] rounded"
+									width={220}
+									height={220}
+									className="object-contain rounded"
 								/>
 							</div>
 						)}
