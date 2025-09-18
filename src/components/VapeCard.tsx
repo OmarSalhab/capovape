@@ -35,7 +35,7 @@ export default function VapeCard({
 						OUT OF STOCK
 					</div>
 				)}
-				<Link href={`/${brand}/${vape.id}`} className="block w-full h-full">
+				<Link href={`/${brand}/${vape.id}`} className="block w-full h-full" prefetch={true}>
 					<div className="w-full h-full relative">
 						{vape.image ? (
 							<Image
