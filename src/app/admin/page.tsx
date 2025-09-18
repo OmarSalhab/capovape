@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import LogoutButton from "@/components/LogoutButton";
 import CreateModal from "@/components/admin/CreateModal";
 import Image from "next/image";
@@ -23,47 +23,74 @@ export default function AdminPage() {
 	const [inStockFilter, setInStockFilter] = useState<string>(""); // '', 'true', 'false'
 	const [minPrice, setMinPrice] = useState<string>("");
 	const [maxPrice, setMaxPrice] = useState<string>("");
+	const [page, setPage] = useState<number>(1);
+	const [totalPages, setTotalPages] = useState<number>(1);
+	const LIMIT = 15;
+
+	// Refs to hold latest filter values so fetchProducts can be stable
+	const brandRef = useRef<string>(brandFilter);
+	const inStockRef = useRef<string>(inStockFilter);
+	const minPriceRef = useRef<string>(minPrice);
+	const maxPriceRef = useRef<string>(maxPrice);
 	const [editProduct, setEditProduct] = useState<EditableProduct | null>(null);
 	const [creating, setCreating] = useState(false);
 
-	async function fetchProducts() {
+	const fetchProducts = useCallback(async (requestPage = 1) => {
 		setLoading(true);
 		try {
 			const params = new URLSearchParams();
-			if (brandFilter) params.set("brand", brandFilter);
-			if (inStockFilter) params.set("inStock", inStockFilter);
-			if (minPrice) params.set("minPrice", minPrice);
-			if (maxPrice) params.set("maxPrice", maxPrice);
-			// admin view: increase limit
-			params.set("limit", "200");
+			// read latest filters from refs (stable callback)
+			if (brandRef.current) params.set("brand", brandRef.current);
+			if (inStockRef.current) params.set("inStock", inStockRef.current);
+			if (minPriceRef.current) params.set("minPrice", minPriceRef.current);
+			if (maxPriceRef.current) params.set("maxPrice", maxPriceRef.current);
+			// server-side pagination and filtering
+			params.set("limit", String(LIMIT));
+			params.set("page", String(requestPage));
 			const res = await fetch(`/api/products?${params.toString()}`);
 			const data = await res.json();
 			if (data.ok) setProducts(data.products || []);
 			else setProducts([]);
+			// update pagination state if present
+			if (data && typeof data.totalPages === 'number') {
+				setTotalPages(data.totalPages);
+				setPage(data.page || requestPage);
+			}
 		} catch (e) {
 			console.error(e);
 			setProducts([]);
 		} finally {
 			setLoading(false);
 		}
-	}
+	}, []);
+
+	// keep refs in sync with state
+	useEffect(() => {
+		brandRef.current = brandFilter;
+	}, [brandFilter]);
+	useEffect(() => {
+		inStockRef.current = inStockFilter;
+	}, [inStockFilter]);
+	useEffect(() => {
+		minPriceRef.current = minPrice;
+	}, [minPrice]);
+	useEffect(() => {
+		maxPriceRef.current = maxPrice;
+	}, [maxPrice]);
 
 	useEffect(() => {
 		(async () => {
 			setLoading(true);
 			try {
-				const params = new URLSearchParams();
-				params.set("limit", "200");
-				const res = await fetch(`/api/products?${params.toString()}`);
-				const data = await res.json();
-				if (data.ok) setProducts(data.products || []);
+				// initial load: first page with server-side filters
+				await fetchProducts(1);
 			} catch (e) {
 				console.error(e);
 			} finally {
 				setLoading(false);
 			}
 		})();
-	}, []);
+	}, [fetchProducts]);
 
 	async function handleDelete(productId: string) {
 		if (!confirm("Delete this product?")) return;
@@ -73,7 +100,7 @@ export default function AdminPage() {
 				{ method: "DELETE" }
 			);
 			if (res.ok) {
-				fetchProducts();
+				fetchProducts(page);
 			} else {
 				console.error("Delete failed");
 			}
@@ -94,7 +121,7 @@ export default function AdminPage() {
 			);
 			if (res.ok) {
 				setEditProduct(null);
-				fetchProducts();
+				fetchProducts(page);
 			} else {
 				console.error("Update failed");
 			}
@@ -269,6 +296,66 @@ export default function AdminPage() {
 								)}
 							</tbody>
 						</table>
+						{/* Pagination UI */}
+						<div className="mt-3 flex items-center justify-between">
+							<div className="text-xs text-muted-foreground">
+								Page {page} of {totalPages} — {""}{/* total would be useful here if needed */}
+							</div>
+							<div className="flex items-center gap-2">
+								<button
+									onClick={() => {
+										if (page > 1) fetchProducts(page - 1);
+									}}
+									className="px-3 py-1 bg-transparent border rounded text-sm"
+								>
+									Prev
+								</button>
+								<div className="hidden sm:flex gap-1">
+									{Array.from({ length: totalPages }).map((_, i) => {
+										const pageNum = i + 1;
+										// show a condensed set if there are many pages
+										if (totalPages > 8) {
+											if (
+												pageNum === 1 ||
+												pageNum === totalPages ||
+												Math.abs(pageNum - page) <= 1
+											) {
+												return (
+													<button
+														key={pageNum}
+														className={`px-2 py-1 rounded ${pageNum === page ? 'bg-mafia text-black' : 'bg-transparent border'}`}
+														onClick={() => fetchProducts(pageNum)}
+													>
+														{pageNum}
+													</button>
+												);
+											}
+											// show ellipsis where appropriate
+											if (pageNum === 2 && page > 4) return <span key={pageNum} className="px-2">…</span>;
+											if (pageNum === totalPages - 1 && page < totalPages - 3) return <span key={pageNum} className="px-2">…</span>;
+											return null;
+										}
+										return (
+											<button
+												key={pageNum}
+												className={`px-2 py-1 rounded ${pageNum === page ? 'bg-mafia text-black' : 'bg-transparent border'}`}
+												onClick={() => fetchProducts(pageNum)}
+											>
+												{pageNum}
+											</button>
+										);
+									})}
+								</div>
+								<button
+									onClick={() => {
+										if (page < totalPages) fetchProducts(page + 1);
+									}}
+									className="px-3 py-1 bg-mafia text-black rounded text-sm"
+								>
+									Next
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -410,6 +497,110 @@ export default function AdminPage() {
 												/>
 											</div>
 										)}
+									</div>
+					
+									{/* Specification editor */}
+									<div className="col-span-1 md:col-span-2">
+										<label className="block text-sm md:text-base mb-2">Specification</label>
+										<div className="space-y-2">
+											{(() => {
+												// normalize specification to array of entries for editing
+												const specObj = editProduct.specification || {};
+												const entries = Object.entries(specObj as Record<string, unknown>);
+												return (
+													<div>
+														{entries.length === 0 && (
+															<div className="text-xs text-muted-foreground mb-2">No specifications yet. Add one below.</div>
+														)}
+														{entries.map(([k, v], idx) => (
+															<div key={k + String(idx)} className="flex flex-col md:flex-row gap-2 md:items-center">
+																<input
+																	className="w-full md:flex-1 p-2 bg-black rounded text-sm"
+																	value={k}
+																	onChange={(e) => {
+																		const newKey = e.target.value;
+																		setEditProduct((prev) => {
+																			if (!prev) return prev;
+																			const spec = { ...(prev.specification || {}) } as Record<string, unknown>;
+																			// avoid losing value when renaming key
+																			const val = spec[k];
+																			delete spec[k];
+																			spec[newKey] = val;
+																			return { ...prev, specification: spec } as EditableProduct;
+																		});
+																	}}
+																/>
+																<input
+																	className="w-full md:flex-1 p-2 bg-black rounded text-sm"
+																	value={v === undefined || v === null ? "" : String(v)}
+																	onChange={(e) => {
+																		const newVal = e.target.value;
+																		setEditProduct((prev) => {
+																			if (!prev) return prev;
+																			const spec = { ...(prev.specification || {}) } as Record<string, unknown>;
+																			spec[k] = newVal;
+																			return { ...prev, specification: spec } as EditableProduct;
+																		});
+																	}}
+																/>
+																<button
+																	className="w-full md:w-auto px-2 py-1 bg-red-700 rounded text-sm"
+																	onClick={() => {
+																		setEditProduct((prev) => {
+																			if (!prev) return prev;
+																			const spec = { ...(prev.specification || {}) } as Record<string, unknown>;
+																			delete spec[k];
+																			return { ...prev, specification: spec } as EditableProduct;
+																		});
+																	}}
+																>
+																	Remove
+																	</button>
+															</div>
+														))}
+														{/* Add new spec entry */}
+														<div className="flex flex-col md:flex-row gap-2 items-stretch mt-2">
+															<input
+																placeholder="Key"
+																className="w-full md:flex-1 p-2 bg-black rounded text-sm"
+																id="__new_spec_key"
+															/>
+															<input
+																placeholder="Value"
+																className="w-full md:flex-1 p-2 bg-black rounded text-sm"
+																id="__new_spec_value"
+															/>
+															<button
+																className="w-full md:w-auto px-3 py-2 bg-green-600 rounded text-sm"
+																onClick={() => {
+																	const keyEl = document.getElementById(
+																		"__new_spec_key"
+																	) as HTMLInputElement | null;
+																	const valEl = document.getElementById(
+																		"__new_spec_value"
+																	) as HTMLInputElement | null;
+																	if (!keyEl || !keyEl.value) {
+																		alert("Please provide a key for the specification");
+																		return;
+																	}
+																	setEditProduct((prev) => {
+																		if (!prev) return prev;
+																		const spec = { ...(prev.specification || {}) } as Record<string, unknown>;
+																		spec[keyEl.value] = valEl?.value ?? "";
+																		// clear inputs
+																		keyEl.value = "";
+																		if (valEl) valEl.value = "";
+																		return { ...prev, specification: spec } as EditableProduct;
+																	});
+																}}
+															>
+																Add
+																</button>
+														</div>
+													</div>
+											);
+											})()}
+										</div>
 									</div>
 								</div>
 							</div>
