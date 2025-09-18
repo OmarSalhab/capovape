@@ -7,7 +7,7 @@ type Vape = {
 	id: string;
 	title: string;
 	price: string;
-	image: string;
+	image?: string;
 	desc: string | undefined;
 	inStock: boolean;
 };
@@ -44,13 +44,15 @@ export default function VapeCard({
 					className="text-xs text-[#F4EDE0] opacity-80 hover:opacity-100"
 				>
 					<div className="w-full h-full grid place-items-center p-4">
-						<Image
-							src={vape.image}
-							alt={vape.title}
-							width={380}
-							height={380}
-							className="object-contain max-h-[100%]"
-						/>
+						{vape.image ? (
+							<img
+								src={vape.image}
+								alt={vape.title}
+								className="object-contain max-h-[100%]"
+							/>
+						) : (
+							<div className="w-[160px] h-[160px] bg-[#111] flex items-center justify-center text-xs text-muted-foreground">No image</div>
+						)}
 					</div>
 				</Link>
 			</div>

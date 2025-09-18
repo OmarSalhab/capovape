@@ -5,10 +5,11 @@ export interface IProduct {
 	briefDescription?: string;
 	brand: string;
 	description?: string;
-		specification?: Record<string, unknown> | null;
+	specification?: Record<string, unknown> | null;
 	image?: string;
+	imageKey?: string;
 	price: number;
-	inStock?: boolean;
+	inStock: boolean;
 	productId: string;
 }
 
@@ -21,8 +22,9 @@ const ProductSchema = new mongoose.Schema<ProductDocument>({
 	description: { type: String },
 	specification: { type: mongoose.Schema.Types.Mixed },
 	image: { type: String },
+	imageKey: { type: String },
 	price: { type: Number, required: true },
-	inStock: { type: Boolean, default: true },
+	inStock: { type: Boolean, default: true,required: true },
 	productId: { type: String, required: true, unique: true },
 });
 
