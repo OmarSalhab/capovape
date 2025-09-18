@@ -1,10 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
 const HeroSlider = () => {
 	const [currentSlide, setCurrentSlide] = useState(0);
+	const touchStartX = useRef<number | null>(null);
+	const touchCurrentX = useRef<number | null>(null);
+	const isSwiping = useRef(false);
 
 	const slides = [
 		{
@@ -22,18 +25,51 @@ const HeroSlider = () => {
 		},
 	];
 
-	const nextSlide = () => {
+	const nextSlide = useCallback(() => {
 		setCurrentSlide((prev) => (prev + 1) % slides.length);
-	};
+	}, [slides.length]);
 
 	const prevSlide = () => {
 		setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 	};
 
+	const onTouchStart = (e: React.TouchEvent) => {
+		touchStartX.current = e.touches[0].clientX;
+		touchCurrentX.current = e.touches[0].clientX;
+		isSwiping.current = true;
+	};
+
+	const onTouchMove = (e: React.TouchEvent) => {
+		if (!isSwiping.current) return;
+		touchCurrentX.current = e.touches[0].clientX;
+	};
+
+	const onTouchEnd = () => {
+		if (!isSwiping.current || touchStartX.current === null || touchCurrentX.current === null) {
+			isSwiping.current = false;
+			touchStartX.current = null;
+			touchCurrentX.current = null;
+			return;
+		}
+		const dx = touchCurrentX.current - touchStartX.current;
+		const threshold = 40; // px
+		if (dx > threshold) {
+			// swipe right -> previous
+			prevSlide();
+		} else if (dx < -threshold) {
+			// swipe left -> next
+			nextSlide();
+		}
+
+		isSwiping.current = false;
+		touchStartX.current = null;
+		touchCurrentX.current = null;
+	};
+
 	useEffect(() => {
 		const timer = setInterval(nextSlide, 5000);
 		return () => clearInterval(timer);
-	}, []);
+	}, [nextSlide]);
 
 	return (
 		<section className="relative ">
@@ -42,6 +78,9 @@ const HeroSlider = () => {
 					<div
 						className="flex transition-transform duration-700 ease-in-out"
 						style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+						onTouchStart={onTouchStart}
+						onTouchMove={onTouchMove}
+						onTouchEnd={onTouchEnd}
 					>
 						{slides.map((slide) => (
 							<div
@@ -55,9 +94,11 @@ const HeroSlider = () => {
 									height={288}
 									className="object-fit h-72 w-full"
 								/> */}
-								<img
+								<Image
 									src={slide.image}
 									alt="offers"
+									width={600}
+									height={240}
 									className="w-full h-full object-contain object-center opacity-60"
 								/>
 							</div>
@@ -67,14 +108,14 @@ const HeroSlider = () => {
 					{/* Navigation Buttons */}
 					<button
 						onClick={prevSlide}
-						className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-mafia-dark/80 border border-border text-muted-foreground hover:text-mafia-gold hover:border-mafia-gold transition-all"
+						className="absolute hidden md:block left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-mafia-dark/80 border border-border text-muted-foreground hover:text-mafia-gold hover:border-mafia-gold transition-all"
 					>
 						<ChevronLeft className="w-6 h-6" />
 					</button>
 
 					<button
 						onClick={nextSlide}
-						className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-mafia-dark/80 border border-border text-muted-foreground hover:text-mafia-gold hover:border-mafia-gold transition-all"
+						className="absolute hidden md:block right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-mafia-dark/80 border border-border text-muted-foreground hover:text-mafia-gold hover:border-mafia-gold transition-all"
 					>
 						<ChevronRight className="w-6 h-6" />
 					</button>

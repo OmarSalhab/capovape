@@ -19,11 +19,11 @@ export default function BrandsSection() {
 			}}
 		>
 			<div className="mx-auto max-w-6xl px-4">
-				<h2 className="text-center text-xl md:text-3xl tracking-[0.25em] text-[#C5A66A] ">
-					MADE MEN BRANDS
+				<h2 className="text-center text-xl md:text-3xl tracking-[0.12em] text-[#C5A66A] ">
+					Curated Houses
 				</h2>
 				<p className="mt-2 text-center text-muted-foreground text-sm md:text-md">
-					Trusted labels curated by CAPO
+					Handpicked brands trusted by Toronto’s connoisseurs — quality you can rely on.
 				</p>
 
 				<div className="mt-8 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-5 md:gap-6">
@@ -51,7 +51,7 @@ export default function BrandsSection() {
 									}}
 								>
 									<div className="rounded-full h-full w-full bg-black/80 grid place-items-center border border-[#3a2f15]">
-										<img
+										<Image
 											src={brand.image}
 											alt={label}
 											width={160}

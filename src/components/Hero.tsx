@@ -42,14 +42,14 @@ export default function Hero() {
 						transition={{ duration: 0.8, delay: 0.1 }}
 						className="mt-6 flex items-center gap-3 justify-center font-serif"
 					>
-						<a
-							href="#shop"
+						{/* <a
+							href="#location"
 							className="px-5 py-2 rounded-md border border-[#C5A66A] text-[#C5A66A] tracking-wide uppercase text-sm hover:bg-[#C5A66A] hover:text-black transition"
 						>
 							Shop All
-						</a>
+						</a> */}
 						<a
-							href="#contact"
+							href="#location"
 							className="px-5 py-2 rounded-md bg-[#C5A66A] text-black tracking-wide uppercase text-sm hover:bg-[#A98B4A] transition"
 						>
 							Find Us

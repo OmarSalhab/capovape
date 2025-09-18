@@ -3,11 +3,12 @@ import AgeGate from "@/components/AgeGate";
 import BrandsSection from "@/components/BrandsSection";
 import Hero from "@/components/Hero";
 import HeroSlider from "@/components/HeroSlider";
+import LocationSection from "@/components/LocationSection";
 import Head from "next/head";
 
 export default function Home() {
 	return (
-		<div className="font-sans">
+		<div className="font-sans ">
 			<Head>
 				<title>CapoVape Canada | Premium Vapes & E-Liquids</title>
 				<meta
@@ -55,6 +56,7 @@ export default function Home() {
 				<Hero/>
 				<BrandsSection />
 				<AboutSection />
+				<LocationSection/>
 				<AgeGate/>
 			</main>
 		</div>

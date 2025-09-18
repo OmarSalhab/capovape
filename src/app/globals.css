@@ -120,6 +120,12 @@ body {
 	font-family: var(--font-inter);
 }
 
+/* Prevent accidental horizontal scrolling on mobile (fallback fix).
+   This masks overflow issues but keeps layout stable while we find the root cause. */
+html, body, #__next {
+	overflow-x: hidden;
+}
+
 /* Headings use Cinzel (primary/title font). Ensure utility classes using font-serif map to Cinzel */
 h1, h2, h3, h4, h5, h6 {
 	font-family: var(--font-cinzel);

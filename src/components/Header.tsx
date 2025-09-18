@@ -182,7 +182,7 @@ const Navigation = () => {
 									onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}
 									onBlur={handleInputBlur}
 									onFocus={handleInputFocus}
-									className="pl-10 bg-transparent border-none  placeholder:text-foreground  selection:text-red-600 text-[14px]"
+									className="pl-10 bg-transparent border-none  placeholder:text-foreground  selection:text-red-600 text-base"
 								/>
 
 								{/* Mobile results (same UI) */}
@@ -216,7 +216,7 @@ const Navigation = () => {
 			</header>
 			{scrolled ? (
 				<Link href="#header" className="">
-					<div className="flex justify-center items-center fixed bottom-10 right-3 min-w-10 min-h-10 pt-2 bg-mafia rounded-md">
+					<div className="flex justify-center items-center fixed bottom-10 right-3 min-w-10 min-h-10 pt-2 bg-mafia rounded-md z-50">
 						<ArrowUpIcon className="w-5 h-5 text-black animate-bounce" />{" "}
 					</div>
 				</Link>
