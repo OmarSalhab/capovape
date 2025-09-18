@@ -45,7 +45,7 @@ export async function PUT(req: Request, context: any) {
     const body = await req.json();
     // Allow only specific fields to be updated
   const allowed: Record<string, unknown> = {};
-    ['title', 'briefDescription', 'brand', 'description', 'specification', 'image', 'price', 'inStock'].forEach(k => {
+    ['title', 'briefDescription', 'brand', 'description', 'specification', 'image', 'imageKey', 'price', 'inStock'].forEach(k => {
       if (body[k] !== undefined) allowed[k] = body[k];
     });
     const updated = await Product.findOneAndUpdate({ productId }, { $set: allowed }, { new: true }).lean();

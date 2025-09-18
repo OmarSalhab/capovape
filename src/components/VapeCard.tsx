@@ -27,11 +27,7 @@ export default function VapeCard({
 			className="group rounded-md overflow-hidden shadow-lg"
 		>
 			<div
-				className="aspect-[4/5] overflow-hidden border border-[#222]"
-				style={{
-					background:
-						"linear-gradient(135deg, rgba(45,10,10,1) 0%, rgba(45,10,10,1) 50%, rgba(10,10,10,1) 50%, rgba(10,10,10,1) 100%)",
-				}}
+				className="aspect-[4/5] relative overflow-hidden border border-[#222] bg-transparent"
 			>
 				{/* Out of stock sticker */}
 				{vape.inStock === false && (
@@ -39,19 +35,18 @@ export default function VapeCard({
 						OUT OF STOCK
 					</div>
 				)}
-				<Link
-					href={`/${brand}/${vape.id}`}
-					className="text-xs text-[#F4EDE0] opacity-80 hover:opacity-100"
-				>
-					<div className="w-full h-full grid place-items-center p-4">
+				<Link href={`/${brand}/${vape.id}`} className="block w-full h-full">
+					<div className="w-full h-full relative">
 						{vape.image ? (
-							<img
+							<Image
 								src={vape.image}
 								alt={vape.title}
-								className="object-contain max-h-[100%]"
+								fill
+								className="object-cover"
+								sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
 							/>
 						) : (
-							<div className="w-[160px] h-[160px] bg-[#111] flex items-center justify-center text-xs text-muted-foreground">No image</div>
+							<div className="w-full h-full bg-[#111] flex items-center justify-center text-xs text-muted-foreground">No image</div>
 						)}
 					</div>
 				</Link>

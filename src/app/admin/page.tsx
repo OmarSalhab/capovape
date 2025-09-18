@@ -164,7 +164,7 @@ export default function AdminPage() {
                       <td className="px-3 py-2 align-top">{formatCurrency(p.price)}</td>
                       <td className="px-3 py-2 align-top">{p.inStock ? 'Yes' : 'No'}</td>
                       <td className="px-3 py-2 align-top">{p.productId}</td>
-                      <td className="px-3 py-2 align-top"><button onClick={() => setEditProduct(p)} className="px-2 py-1 bg-yellow-500 text-black rounded">Edit</button></td>
+                      <td className="px-3 py-2 align-top"><button onClick={() => setEditProduct({ ...p, _originalImageKey: p.imageKey } as any)} className="px-2 py-1 bg-yellow-500 text-black rounded">Edit</button></td>
                       <td className="px-3 py-2 align-top"><button onClick={() => handleDelete(p.productId)} className="px-2 py-1 bg-red-700 rounded">Delete</button></td>
                     </tr>
                   ))
@@ -176,21 +176,84 @@ export default function AdminPage() {
 
         {/* Edit modal (simple) */}
         {editProduct && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
-            <div className="bg-[#0b0b0b] rounded p-4 w-full max-w-2xl max-h-[90vh] overflow-auto">
-              <h2 className="text-xl mb-2">Edit product</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <input value={editProduct.title} onChange={e => setEditProduct({ ...editProduct, title: e.target.value })} className="p-2 bg-black rounded" />
-                <input value={String(editProduct.price)} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value || 0) })} className="p-2 bg-black rounded" />
-                <input value={editProduct.brand || ''} onChange={e => setEditProduct({ ...editProduct, brand: e.target.value })} className="p-2 bg-black rounded" />
-                <select value={editProduct.inStock ? 'true' : 'false'} onChange={e => setEditProduct({ ...editProduct, inStock: e.target.value === 'true' })} className="p-2 bg-black rounded">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
+            <div className="bg-[#0b0b0b] rounded-lg p-4 w-full max-w-3xl max-h-[92vh] overflow-auto shadow-lg">
+              <h2 className="text-xl md:text-2xl font-semibold mb-2">Edit product</h2>
+              <p className="text-sm text-muted-foreground mb-3">Update product details. If you replace the image, the old image will be removed from storage.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm md:text-base mb-1">Title</label>
+                  <input value={editProduct.title} onChange={e => setEditProduct({ ...editProduct, title: e.target.value })} className="p-3 bg-black rounded text-base md:text-lg w-full" />
+                </div>
+                <div>
+                  <label className="block text-sm md:text-base mb-1">Price</label>
+                  <input type="number" step="0.01" inputMode="decimal" value={editProduct.price === 0 ? '' : String(editProduct.price)} onChange={e => setEditProduct({ ...editProduct, price: e.target.value === '' ? 0 : parseFloat(e.target.value) })} className="p-3 bg-black rounded text-base md:text-lg w-full" />
+                </div>
+                <div>
+                  <label className="block text-sm md:text-base mb-1">Brand</label>
+                  <input value={editProduct.brand || ''} onChange={e => setEditProduct({ ...editProduct, brand: e.target.value })} className="p-3 bg-black rounded text-base md:text-lg w-full" />
+                </div>
+                <select value={editProduct.inStock ? 'true' : 'false'} onChange={e => setEditProduct({ ...editProduct, inStock: e.target.value === 'true' })} className="p-3 bg-black rounded text-base md:text-lg">
                   <option value="true">In stock</option>
                   <option value="false">Out of stock</option>
                 </select>
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block text-sm md:text-base text-muted-foreground">Replace image (optional)</label>
+                  <div className="mt-2">
+                    <input type="file" accept="image/*" onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      // upload new image to R2
+                      try {
+                        const dataUrl = await new Promise<string>((resolve, reject) => {
+                          const reader = new FileReader();
+                          reader.onload = () => resolve(String(reader.result));
+                          reader.onerror = reject;
+                          reader.readAsDataURL(file);
+                        });
+                        const base64 = dataUrl.split(',')[1];
+                        const res = await fetch('/api/admin/r2/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ filename: file.name, contentType: file.type, data: base64, keyPrefix: 'products' }) });
+                        const data = await res.json();
+                        if (data.ok) {
+                          // store new image and key on editProduct; remember old key for deletion when saving
+                          setEditProduct({ ...editProduct, image: data.publicUrl, imageKey: data.key, _tmpNewImageKey: data.key } as any);
+                        } else {
+                          alert('Upload failed: ' + (data.error || ''));
+                        }
+                      } catch (err) { console.error(err); alert('Upload error'); }
+                    }} className="mt-1" />
+                    {editProduct.image && <div className="mt-3"><img src={editProduct.image} alt="preview" className="max-w-[220px] max-h-[220px] object-contain rounded" /></div>}
+                  </div>
+                </div>
               </div>
-              <div className="mt-4 flex gap-2 justify-end">
-                <button onClick={() => setEditProduct(null)} className="px-3 py-2 bg-transparent border rounded">Cancel</button>
-                <button onClick={() => handleSave(editProduct)} className="px-3 py-2 bg-mafia text-black rounded">Save</button>
+              <div className="mt-6 flex flex-col md:flex-row gap-3 justify-end">
+                <button onClick={async () => {
+                  // if user uploaded a new image while editing but then cancelled, delete the temp image
+                  const newTmp = (editProduct as any)?._tmpNewImageKey;
+                  if (newTmp) {
+                    try {
+                      await fetch('/api/admin/r2/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: newTmp }) });
+                    } catch (e) { console.error('Failed to delete temp edit upload', e); }
+                  }
+                  setEditProduct(null);
+                }} className="px-4 py-3 bg-transparent border rounded">Cancel</button>
+                <button onClick={async () => {
+                  // when saving, if a new tmp image key exists, delete the old imageKey from R2
+                  const oldKey = (editProduct as any)._originalImageKey || editProduct.imageKey;
+                  const newTmp = (editProduct as any)._tmpNewImageKey;
+                  if (newTmp && oldKey && oldKey !== newTmp) {
+                    try {
+                      await fetch('/api/admin/r2/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: oldKey }) });
+                    } catch (e) { console.error('Failed to delete old image', e); }
+                    // remove tmp marker before saving
+                    const cleaned = { ...editProduct } as any;
+                    delete cleaned._tmpNewImageKey;
+                    delete cleaned._originalImageKey;
+                    handleSave(cleaned as any);
+                  } else {
+                    handleSave(editProduct);
+                  }
+                }} className="px-4 py-3 bg-mafia text-black rounded">Save</button>
               </div>
             </div>
           </div>

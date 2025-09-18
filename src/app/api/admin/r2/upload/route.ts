@@ -20,11 +20,23 @@ export async function POST(req: Request) {
     // Use S3-compatible client to upload
     await uploadObject(R2_BUCKET, key, buffer, contentType);
 
-    // construct public URL using account-hosted endpoint
+    // construct public URL using either a provided public base (preferred) or account-hosted endpoint
+    // Use encodeURI so that slashes in the key remain as path separators (not %2F)
+    const publicBase = process.env.R2_PUBLIC_BASE || '';
     const account = process.env.R2_ACCOUNT_ID || process.env.CLOUDFLARE_ACCOUNT_ID || '';
-    const publicUrl = account ? `https://${account}.r2.cloudflarestorage.com/${R2_BUCKET}/${encodeURIComponent(key)}` : `/${R2_BUCKET}/${encodeURIComponent(key)}`;
+    // When using the public r2.dev base that Cloudflare provides (pub-...r2.dev)
+    // the public URL format is typically: https://pub-...r2.dev/<key>
+    // so we should NOT include the bucket name in the public URL in that case.
+    const encodedPathWithBucket = encodeURI(`${R2_BUCKET}/${key}`);
+    const encodedPath = encodeURI(`${key}`);
+    const publicUrl = publicBase
+      ? `${publicBase.replace(/\/+$/,'')}/${encodedPath}`
+      : account
+      ? `https://${account}.r2.cloudflarestorage.com/${encodedPathWithBucket}`
+      : `/${encodedPathWithBucket}`;
 
-    return NextResponse.json({ ok: true, publicUrl, key });
+  // Return the key and publicUrl to the client for verification/debugging
+  return NextResponse.json({ ok: true, publicUrl, key });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     console.error('[R2 upload error]', message);
