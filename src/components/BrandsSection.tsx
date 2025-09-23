@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 const Brands = [
@@ -18,6 +17,10 @@ const Brands = [
 	{
 		id: "alfakher",
 		image: "/14691854.webp",
+	},
+	{
+		id: "geek",
+		image: "/geekbar_New.webp",
 	},
 ];
 export default function BrandsSection() {
