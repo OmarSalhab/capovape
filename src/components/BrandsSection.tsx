@@ -11,6 +11,14 @@ const Brands = [
 		id: "ovns",
 		image: "/OVNS-Logo.webp",
 	},
+	{
+		id: "stlth",
+		image: "/stlth-pod-packs.webp",
+	},
+	{
+		id: "alfakher",
+		image: "/14691854.webp",
+	},
 ];
 export default function BrandsSection() {
 	return (
