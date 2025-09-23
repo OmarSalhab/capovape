@@ -7,6 +7,10 @@ const Brands = [
 		id: "beast",
 		image: "/flavour-beast-logo-icon-age-gate-wht_500x_trans.png",
 	},
+	{
+		id: "ovns",
+		image: "/OVNS-Logo.webp",
+	},
 ];
 export default function BrandsSection() {
 	return (
