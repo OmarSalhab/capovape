@@ -26,8 +26,15 @@ export async function GET(req: Request) {
     if (q) {
       // Case-insensitive partial match on title
       const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-      const matches = await Product.find({ title: regex }).sort({ title: 1 }).limit(10).lean();
-      return NextResponse.json({ ok: true, products: matches, total: matches.length });
+      const matches = await Product.find({ title: regex })
+        .sort({ title: 1 })
+        .limit(10)
+        .select({ productId: 1, title: 1, price: 1, image: 1, briefDescription: 1, inStock: 1, brand: 1 })
+        .lean();
+      const res = NextResponse.json({ ok: true, products: matches, total: matches.length });
+      // Light caching for search suggestions (safe for public)
+      res.headers.set('Cache-Control', 'public, max-age=60, s-maxage=60');
+      return res;
     }
 
   const filter: Record<string, unknown> = {};
@@ -44,9 +51,17 @@ export async function GET(req: Request) {
     const page = Math.min(Math.max(1, pageParam), totalPages);
     const skip = (page - 1) * limit;
 
-    const products = await Product.find(filter).sort({ title: 1 }).skip(skip).limit(limit).lean();
+    const products = await Product.find(filter)
+      .sort({ title: 1 })
+      .skip(skip)
+      .limit(limit)
+      .select({ productId: 1, title: 1, price: 1, image: 1, briefDescription: 1, inStock: 1, brand: 1 })
+      .lean();
 
-    return NextResponse.json({ ok: true, products, page, totalPages, total });
+    const res = NextResponse.json({ ok: true, products, page, totalPages, total });
+    // Brand/product listings can be cached briefly at the edge for public pages; admin can bypass via no-store client fetch if needed
+    res.headers.set('Cache-Control', 'public, max-age=30, s-maxage=60');
+    return res;
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ ok: false, error: message }, { status: 500 });

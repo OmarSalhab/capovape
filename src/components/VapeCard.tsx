@@ -42,6 +42,7 @@ export default function VapeCard({
 								src={vape.image}
 								alt={vape.title}
 								fill
+								loading="lazy"
 								className="object-cover"
 								sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
 							/>

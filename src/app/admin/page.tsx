@@ -47,7 +47,7 @@ export default function AdminPage() {
 			// server-side pagination and filtering
 			params.set("limit", String(LIMIT));
 			params.set("page", String(requestPage));
-			const res = await fetch(`/api/products?${params.toString()}`);
+			const res = await fetch(`/api/products?${params.toString()}`, { cache: 'no-store' });
 			const data = await res.json();
 			if (data.ok) setProducts(data.products || []);
 			else setProducts([]);
