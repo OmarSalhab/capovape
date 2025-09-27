@@ -5,6 +5,9 @@ import LogoutButton from "@/components/LogoutButton";
 import CreateModal from "@/components/admin/CreateModal";
 import Image from "next/image";
 import { IProduct } from "../../../models/Product";
+import { BRANDS, brandLabel } from "@/lib/brands";
+import Spinner from "@/components/ui/Spinner";
+import { useToast } from "@/components/ui/Toast";
 
 type EditableProduct = IProduct & {
 	_tmpNewImageKey?: string;
@@ -34,6 +37,9 @@ export default function AdminPage() {
 	const maxPriceRef = useRef<string>(maxPrice);
 	const [editProduct, setEditProduct] = useState<EditableProduct | null>(null);
 	const [creating, setCreating] = useState(false);
+	const [busyAction, setBusyAction] = useState<null | "apply" | "delete" | "save" | "paginate">(null);
+	const [search, setSearch] = useState<string>("");
+	const { addToast } = useToast();
 
 	const fetchProducts = useCallback(async (requestPage = 1) => {
 		setLoading(true);
@@ -122,18 +128,19 @@ export default function AdminPage() {
 			if (res.ok) {
 				setEditProduct(null);
 				fetchProducts(page);
+				addToast({ kind: "success", message: "Product updated" });
 			} else {
 				console.error("Update failed");
+				addToast({ kind: "error", message: "Update failed" });
 			}
 		} catch (e) {
 			console.error(e);
+			addToast({ kind: "error", message: "Update error" });
 		}
 	}
 
-	// Derive unique brands for filter select
-	const brands = Array.from(new Set(products.map((p) => p.brand))).filter(
-		Boolean
-	) as string[];
+	// Static brands for filter select
+	const brands = BRANDS;
 
 	return (
 		<div className="min-h-screen bg-[#050505] text-white p-4">
@@ -151,7 +158,15 @@ export default function AdminPage() {
 				</div>
 
 				<div className="bg-[#0b0b0b] rounded-lg p-4 shadow">
-					<div className="flex justify-end mb-3">
+					<div className="flex justify-between items-center mb-3 gap-3 flex-wrap">
+						<div className="flex-1 min-w-[220px]">
+							<input
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+								placeholder="Search in table (title, brand, id)"
+								className="w-full p-2 bg-black rounded"
+							/>
+						</div>
 						<button
 							onClick={() => {
 								setCreating(true);
@@ -171,8 +186,8 @@ export default function AdminPage() {
 							>
 								<option value="">All brands</option>
 								{brands.map((b) => (
-									<option key={b} value={b}>
-										{b}
+									<option key={b.id} value={b.id}>
+										{b.label}
 									</option>
 								))}
 							</select>
@@ -211,10 +226,20 @@ export default function AdminPage() {
 
 					<div className="flex gap-2 mb-4">
 						<button
-							onClick={() => fetchProducts()}
+							onClick={async () => {
+								setBusyAction("apply");
+								addToast({ kind: "info", message: "Applying filters…" });
+								await fetchProducts(1);
+								setBusyAction(null);
+								addToast({ kind: "success", message: "Filters applied" });
+							}}
 							className="px-3 py-2 bg-mafia text-black rounded"
 						>
-							Apply
+							{busyAction === "apply" ? (
+								<span className="inline-flex items-center gap-2"><Spinner size={14}/> Applying…</span>
+							) : (
+								"Apply"
+							)}
 						</button>
 						<button
 							onClick={() => {
@@ -222,7 +247,8 @@ export default function AdminPage() {
 								setInStockFilter("");
 								setMinPrice("");
 								setMaxPrice("");
-								fetchProducts();
+								fetchProducts(1);
+								addToast({ kind: "info", message: "Filters reset" });
 							}}
 							className="px-3 py-2 bg-transparent border rounded"
 						>
@@ -257,12 +283,22 @@ export default function AdminPage() {
 										</td>
 									</tr>
 								) : (
-									products.map((p) => (
+									products
+										.filter((p) => {
+											if (!search) return true;
+											const q = search.toLowerCase();
+											return (
+												p.title.toLowerCase().includes(q) ||
+												(p.brand || "").toLowerCase().includes(q) ||
+												p.productId.toLowerCase().includes(q)
+											);
+										})
+										.map((p) => (
 										<tr key={p.productId} className="border-t border-border">
 											<td className="px-3 py-2 align-top max-w-xs truncate">
 												{p.title}
 											</td>
-											<td className="px-3 py-2 align-top">{p.brand}</td>
+											<td className="px-3 py-2 align-top">{brandLabel(p.brand)}</td>
 											<td className="px-3 py-2 align-top">
 												{formatCurrency(p.price)}
 											</td>
@@ -272,12 +308,10 @@ export default function AdminPage() {
 											<td className="px-3 py-2 align-top">{p.productId}</td>
 											<td className="px-3 py-2 align-top">
 												<button
-													onClick={() =>
-														setEditProduct({
-															...p,
-															_originalImageKey: p.imageKey,
-														})
-													}
+													onClick={() => {
+														setEditProduct({ ...p, _originalImageKey: p.imageKey });
+														addToast({ kind: "info", message: "Editing product…" });
+													}}
 													className="px-2 py-1 bg-yellow-500 text-black rounded"
 												>
 													Edit
@@ -285,10 +319,20 @@ export default function AdminPage() {
 											</td>
 											<td className="px-3 py-2 align-top">
 												<button
-													onClick={() => handleDelete(p.productId)}
+													onClick={async () => {
+														setBusyAction("delete");
+														addToast({ kind: "info", message: "Deleting…" });
+														await handleDelete(p.productId);
+														setBusyAction(null);
+														addToast({ kind: "success", message: "Product deleted" });
+													}}
 													className="px-2 py-1 bg-red-700 rounded"
 												>
-													Delete
+													{busyAction === "delete" ? (
+														<span className="inline-flex items-center gap-2"><Spinner size={12}/> Deleting…</span>
+													) : (
+														"Delete"
+													)}
 												</button>
 											</td>
 										</tr>
@@ -303,12 +347,17 @@ export default function AdminPage() {
 							</div>
 							<div className="flex items-center gap-2">
 								<button
-									onClick={() => {
-										if (page > 1) fetchProducts(page - 1);
+									onClick={async () => {
+										if (page > 1) {
+											setBusyAction("paginate");
+											// addToast({ kind: "info", message: `Loading page ${page - 1}…` });
+											await fetchProducts(page - 1);
+											setBusyAction(null);
+										}
 									}}
 									className="px-3 py-1 bg-transparent border rounded text-sm"
 								>
-									Prev
+									{busyAction === "paginate" ? (<span className="inline-flex items-center gap-2"><Spinner size={12}/> Prev</span>) : 'Prev'}
 								</button>
 								<div className="hidden sm:flex gap-1">
 									{Array.from({ length: totalPages }).map((_, i) => {
@@ -324,7 +373,12 @@ export default function AdminPage() {
 													<button
 														key={pageNum}
 														className={`px-2 py-1 rounded ${pageNum === page ? 'bg-mafia text-black' : 'bg-transparent border'}`}
-														onClick={() => fetchProducts(pageNum)}
+														onClick={async () => {
+															setBusyAction("paginate");
+															// addToast({ kind: 'info', message: `Loading page ${pageNum}…` });
+															await fetchProducts(pageNum);
+															setBusyAction(null);
+														}}
 													>
 														{pageNum}
 													</button>
@@ -339,7 +393,12 @@ export default function AdminPage() {
 											<button
 												key={pageNum}
 												className={`px-2 py-1 rounded ${pageNum === page ? 'bg-mafia text-black' : 'bg-transparent border'}`}
-												onClick={() => fetchProducts(pageNum)}
+												onClick={async () => {
+													setBusyAction("paginate");
+													// addToast({ kind: 'info', message: `Loading page ${pageNum}…` });
+													await fetchProducts(pageNum);
+													setBusyAction(null);
+												}}
 											>
 												{pageNum}
 											</button>
@@ -347,12 +406,17 @@ export default function AdminPage() {
 									})}
 								</div>
 								<button
-									onClick={() => {
-										if (page < totalPages) fetchProducts(page + 1);
+									onClick={async () => {
+										if (page < totalPages) {
+											setBusyAction("paginate");
+											// addToast({ kind: 'info', message: `Loading page ${page + 1}…` });
+											await fetchProducts(page + 1);
+											setBusyAction(null);
+										}
 									}}
 									className="px-3 py-1 bg-mafia text-black rounded text-sm"
 								>
-									Next
+									{busyAction === "paginate" ? (<span className="inline-flex items-center gap-2"><Spinner size={12}/> Next</span>) : 'Next'}
 								</button>
 							</div>
 						</div>
@@ -410,13 +474,18 @@ export default function AdminPage() {
 									<label className="block text-sm md:text-base mb-1">
 										Brand
 									</label>
-									<input
+									<select
 										value={editProduct.brand || ""}
 										onChange={(e) =>
 											setEditProduct({ ...editProduct, brand: e.target.value })
 										}
 										className="p-3 bg-black rounded text-base md:text-lg w-full"
-									/>
+									>
+										<option value="">Select a brand</option>
+										{BRANDS.map((b) => (
+											<option key={b.id} value={b.id}>{b.label}</option>
+										))}
+									</select>
 								</div>
 								<select
 									value={editProduct.inStock ? "true" : "false"}
@@ -621,6 +690,7 @@ export default function AdminPage() {
 											}
 										}
 										setEditProduct(null);
+										addToast({ kind: 'info', message: 'Edit canceled' });
 									}}
 									className="px-4 py-3 bg-transparent border rounded"
 								>
@@ -628,6 +698,8 @@ export default function AdminPage() {
 								</button>
 								<button
 									onClick={async () => {
+										setBusyAction('save');
+										addToast({ kind: 'info', message: 'Saving…' });
 										// when saving, if a new tmp image key exists, delete the old imageKey from R2
 										const oldKey = editProduct?._originalImageKey || editProduct.imageKey;
 										const newTmp = editProduct?._tmpNewImageKey;
@@ -647,15 +719,19 @@ export default function AdminPage() {
 											};
 											delete cleanedObj._tmpNewImageKey;
 											delete cleanedObj._originalImageKey;
-											handleSave(cleanedObj as IProduct);
+											await handleSave(cleanedObj as IProduct);
 										} else {
 											// editProduct should be non-null here
-											handleSave(editProduct as IProduct);
+											await handleSave(editProduct as IProduct);
 										}
+										setBusyAction(null);
 									}}
-									className="px-4 py-3 bg-mafia text-black rounded"
+									className="px-4 py-3 bg-mafia text-black rounded disabled:opacity-60"
+									disabled={busyAction === 'save'}
 								>
-									Save
+									{busyAction === 'save' ? (
+										<span className="inline-flex items-center gap-2"><Spinner size={14}/> Saving…</span>
+									) : 'Save'}
 								</button>
 							</div>
 						</div>

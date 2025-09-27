@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { BRANDS } from "@/lib/brands";
+import Spinner from "@/components/ui/Spinner";
+import { useToast } from "@/components/ui/Toast";
 
 interface Product {
 	title: string;
@@ -37,6 +40,8 @@ export default function CreateModal({
 		Array<{ k: string; v: string }>
 	>([]);
 	const [uploading, setUploading] = useState(false);
+	const [creatingBusy, setCreatingBusy] = useState(false);
+	const { addToast } = useToast();
 
 	if (!visible) return null;
 
@@ -65,14 +70,16 @@ export default function CreateModal({
 					</div>
 					<div>
 						<label className="block text-sm md:text-base mb-1">Brand</label>
-						<input
+						<select
 							value={newProduct.brand || ""}
-							onChange={(e) =>
-								setNewProduct({ ...newProduct, brand: e.target.value })
-							}
-							placeholder="Brand"
+							onChange={(e) => setNewProduct({ ...newProduct, brand: e.target.value })}
 							className="p-3 bg-black rounded text-base md:text-lg w-full"
-						/>
+						>
+							<option value="">Select a brand</option>
+							{BRANDS.map((b) => (
+								<option key={b.id} value={b.id}>{b.label}</option>
+							))}
+						</select>
 					</div>
 
 					<div>
@@ -301,9 +308,7 @@ export default function CreateModal({
 							className="mt-2"
 						/>
 						{uploading && (
-							<div className="text-sm text-muted-foreground mt-2">
-								Uploading...
-							</div>
+							<div className="text-sm text-muted-foreground mt-2 inline-flex items-center gap-2"><Spinner size={14}/> Uploading…</div>
 						)}
 						{newProduct.image && (
 							<div className="mt-3">
@@ -336,6 +341,7 @@ export default function CreateModal({
 								}
 								setTempUploadedKey(null);
 							}
+							addToast({ kind: 'info', message: 'Create canceled' });
 							onClose();
 						}}
 						className="px-4 py-3 bg-transparent border rounded"
@@ -345,6 +351,8 @@ export default function CreateModal({
 					<button
 						onClick={async () => {
 							try {
+								setCreatingBusy(true);
+								// addToast({ kind: 'info', message: 'Creating product…' });
 								const specObj: Record<string, string> = {};
 								specEntries.forEach((s) => {
 									if (s.k) specObj[s.k] = s.v;
@@ -361,17 +369,19 @@ export default function CreateModal({
 									setTempUploadedKey(null);
 									onClose();
 									onCreated();
+									addToast({ kind: 'success', message: 'Product created' });
 								} else {
-									alert("Create failed: " + (data.error || ""));
+									addToast({ kind: 'error', message: 'Create failed' });
 								}
 							} catch (err) {
 								console.error(err);
-								alert("Create error");
+								addToast({ kind: 'error', message: 'Create error' });
 							}
+							setCreatingBusy(false);
 						}}
 						className="px-4 py-3 bg-green-600 rounded text-black"
 					>
-						Create
+						{creatingBusy ? (<span className="inline-flex items-center gap-2"><Spinner size={14}/> Creating…</span>) : 'Create'}
 					</button>
 				</div>
 			</div>
