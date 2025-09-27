@@ -2,7 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Brands = [
-	{ id: "allo", image: "/ALLO_Logo-410x205_500x.png" },
+	{
+		id: "allo",
+		image: "/Allo_Logo_adbdd6e2-3d8d-4e43-b89a-b82ae6d1493c_large.webp",
+	},
 	{
 		id: "beast",
 		image: "/flavour-beast-logo-icon-age-gate-wht_500x_trans.png",
@@ -23,6 +26,14 @@ const Brands = [
 		id: "geek",
 		image: "/geekbar_New.webp",
 	},
+	{
+		id: "drip'n-by-envi",
+		image: "/image-Photoroom_-_2025-03-29T140119.197.webp",
+	},
+	{
+		id: "breeze-prime",
+		image: "/6ef63b_ef0c16d16a5b43c8a41c37e598d8646c~mv2.webp",
+	},
 ];
 export default function BrandsSection() {
 	return (
@@ -39,7 +50,8 @@ export default function BrandsSection() {
 					Curated Houses
 				</h2>
 				<p className="mt-2 text-center text-muted-foreground text-sm md:text-md">
-					Handpicked brands trusted by Toronto’s connoisseurs — quality you can rely on.
+					Handpicked brands trusted by Toronto’s connoisseurs — quality you can
+					rely on.
 				</p>
 
 				<div className="mt-8 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-5 md:gap-6">
