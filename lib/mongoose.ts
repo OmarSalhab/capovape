@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
-import "dotenv/config";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-	throw new Error(
-		"Please define the MONGODB_URI environment variable inside .env.local"
-	);
+	// Throw a clear error early to surface misconfiguration
+	throw new Error("MONGODB_URI is not set. Configure it in your environment variables (do not rely on dotenv in production).");
 }
 
 /**
