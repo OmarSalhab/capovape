@@ -1,26 +1,156 @@
 @import "tailwindcss";
+/* Import fonts: Cinzel for titles, Inter for body */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap');
+
+/* Responsive selects: full-width on mobile with larger tap targets */
+select, .select, .w-select {
+	width: 100%;
+	font-size: 0.875rem; /* text-sm */
+	padding: 0.5rem 0.75rem; /* px-3 py-2 */
+	border-radius: 0.375rem; /* rounded */
+	background-color: #000;
+	border: 1px solid hsl(var(--border));
+}
+@media (min-width: 640px) {
+	select, .select, .w-select { font-size: 1rem; }
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: 0 0% 8%;
+	--foreground: 40 20% 92%;
+
+	--card: 0 0% 12%;
+	--card-foreground: 40 20% 92%;
+
+	--popover: 0 0% 10%;
+	--popover-foreground: 40 20% 92%;
+
+	/* Golden luxury accents */
+	--primary: 40 90% 57%;
+	--primary-foreground: 0 0% 8%;
+
+	--secondary: 0 0% 18%;
+	--secondary-foreground: 40 20% 92%;
+
+	--muted: 0 0% 15%;
+	--muted-foreground: 40 10% 60%;
+
+	--accent: 45 85% 65%;
+	--accent-foreground: 0 0% 8%;
+
+	--destructive: 0 75% 55%;
+	--destructive-foreground: 40 20% 92%;
+
+	--border: 0 0% 20%;
+	--input: 0 0% 15%;
+	--ring: 45 85% 65%;
+
+	/* Custom Mafia Colors */
+	--mafia-black: 0 0% 8%;
+	--mafia-dark: 0 0% 12%;
+	--mafia-gray: 0 0% 18%;
+	--mafia-gold: 45 85% 65%;
+	--mafia-gold-dark: 42 75% 55%;
+	--mafia-silver: 200 10% 70%;
+
+	/* Gradients */
+	--gradient-gold: linear-gradient(
+		135deg,
+		hsl(var(--mafia-gold)),
+		hsl(var(--mafia-gold-dark))
+	);
+	--gradient-dark: linear-gradient(
+		180deg,
+		hsl(var(--mafia-black)),
+		hsl(var(--mafia-dark))
+	);
+	--gradient-card: linear-gradient(
+		145deg,
+		hsl(var(--mafia-dark)),
+		hsl(var(--mafia-gray))
+	);
+
+	/* Shadows */
+	--shadow-mafia: 0 10px 30px -10px hsl(var(--mafia-gold) / 0.2);
+	--shadow-card: 0 8px 25px -8px hsl(0 0% 0% / 0.4);
+	--shadow-glow: 0 0 40px hsl(var(--mafia-gold) / 0.3);
+
+	/* Animations */
+	--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	--transition-fast: all 0.15s ease-out;
+
+	--radius: 0.5rem;
+
+	--sidebar-background: 0 0% 98%;
+
+	--sidebar-foreground: 240 5.3% 26.1%;
+
+	--sidebar-primary: 240 5.9% 10%;
+
+	--sidebar-primary-foreground: 0 0% 98%;
+
+	--sidebar-accent: 240 4.8% 95.9%;
+
+	--sidebar-accent-foreground: 240 5.9% 10%;
+
+	--sidebar-border: 220 13% 91%;
+
+	--sidebar-ring: 217.2 91.2% 59.8%;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: hsl(var(--background));
+	--color-foreground: hsl(var(--foreground));
+	/* Font variables used across the app */
+	--font-cinzel: 'Cinzel', serif;
+	--font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	--font-sans: var(--font-inter);
+	--font-mono: var(--font-geist-mono);
+	--color-mafia: hsl(var(--mafia-gold));
+	--color-primary: hsl(var(--primary));
+	--color-border: hsl(var(--border));
+	--color-mafia-gray: hsl(var(--mafia-gray));
+	--color-mafia-black: hsl(var(--mafia-black));
+	--color-mafia-dark: hsl(var(--mafia-dark));
+	--color-muted-foreground: hsl(var(--muted-foreground));
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: hsl(45 85% 65%);
+	}
+}
+
+.slider-container {
+	background: var(--gradient-dark);
+	box-shadow: var(--shadow-card);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-inter);
+}
+
+/* Prevent accidental horizontal scrolling on mobile (fallback fix).
+   This masks overflow issues but keeps layout stable while we find the root cause. */
+html, body, #__next {
+	overflow-x: hidden;
+}
+
+/* Headings use Cinzel (primary/title font). Ensure utility classes using font-serif map to Cinzel */
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-cinzel);
+	letter-spacing: 0.02em;
+}
+
+/* Keep the existing utility class `.font-serif` working consistently */
+.font-serif {
+	font-family: var(--font-cinzel) !important;
+}
+
+/* Body text / paragraphs use Inter */
+p, span, li, a, label {
+	font-family: var(--font-inter);
 }
