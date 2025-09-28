@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     await dbConnect();
     const body = await req.json();
     // Minimal validation
-    const required = ['title', 'brand', 'price', 'productId'];
+  const required = ['title', 'brand', 'price', 'productId', 'category'];
     for (const k of required) {
       if (!body[k]) return NextResponse.json({ ok: false, error: `${k} required` }, { status: 400 });
     }
@@ -22,6 +22,8 @@ export async function POST(req: Request) {
       price: Number(body.price),
       inStock: body.inStock === undefined ? true : Boolean(body.inStock),
       productId: body.productId,
+      category: body.category,
+      subCategory: body.category === 'pods-devices' ? body.subCategory : undefined,
     });
     await doc.save();
     return NextResponse.json({ ok: true, product: doc.toObject() });

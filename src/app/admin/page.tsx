@@ -24,6 +24,8 @@ export default function AdminPage() {
 	const [loading, setLoading] = useState(false);
 	const [brandFilter, setBrandFilter] = useState<string>("");
 	const [inStockFilter, setInStockFilter] = useState<string>(""); // '', 'true', 'false'
+	const [categoryFilter, setCategoryFilter] = useState<string>(""); // '', 'disposable' | 'pods-devices' | 'e-liquids'
+	const [subFilter, setSubFilter] = useState<string>(""); // '', 'pods' | 'devices'
 	const [minPrice, setMinPrice] = useState<string>("");
 	const [maxPrice, setMaxPrice] = useState<string>("");
 	const [page, setPage] = useState<number>(1);
@@ -35,6 +37,8 @@ export default function AdminPage() {
 	const inStockRef = useRef<string>(inStockFilter);
 	const minPriceRef = useRef<string>(minPrice);
 	const maxPriceRef = useRef<string>(maxPrice);
+	const categoryRef = useRef<string>(categoryFilter);
+	const subRef = useRef<string>(subFilter);
 	const [editProduct, setEditProduct] = useState<EditableProduct | null>(null);
 	const [creating, setCreating] = useState(false);
 	const [busyAction, setBusyAction] = useState<null | "apply" | "delete" | "save" | "paginate">(null);
@@ -48,6 +52,8 @@ export default function AdminPage() {
 			// read latest filters from refs (stable callback)
 			if (brandRef.current) params.set("brand", brandRef.current);
 			if (inStockRef.current) params.set("inStock", inStockRef.current);
+			if (categoryRef.current) params.set("category", categoryRef.current);
+			if (categoryRef.current === 'pods-devices' && subRef.current) params.set("sub", subRef.current);
 			if (minPriceRef.current) params.set("minPrice", minPriceRef.current);
 			if (maxPriceRef.current) params.set("maxPrice", maxPriceRef.current);
 			// server-side pagination and filtering
@@ -77,6 +83,17 @@ export default function AdminPage() {
 	useEffect(() => {
 		inStockRef.current = inStockFilter;
 	}, [inStockFilter]);
+	useEffect(() => {
+		categoryRef.current = categoryFilter;
+		// clear sub filter if category is not pods-devices
+		if (categoryFilter !== 'pods-devices') {
+			setSubFilter("");
+			subRef.current = "";
+		}
+	}, [categoryFilter]);
+	useEffect(() => {
+		subRef.current = subFilter;
+	}, [subFilter]);
 	useEffect(() => {
 		minPriceRef.current = minPrice;
 	}, [minPrice]);
@@ -176,7 +193,34 @@ export default function AdminPage() {
 							Create Product
 						</button>
 					</div>
-					<div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+					<div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
+						<div>
+							<label className="text-xs text-muted-foreground">Category</label>
+							<select
+								value={categoryFilter}
+								onChange={(e) => setCategoryFilter(e.target.value)}
+								className="w-full mt-1 p-2 bg-black rounded"
+							>
+								<option value="">All</option>
+								<option value="disposable">Disposable</option>
+								<option value="pods-devices">Pods & Devices</option>
+								<option value="e-liquids">E-liquids</option>
+							</select>
+						</div>
+						{categoryFilter === 'pods-devices' && (
+							<div>
+								<label className="text-xs text-muted-foreground">Subcategory</label>
+								<select
+									value={subFilter}
+									onChange={(e) => setSubFilter(e.target.value)}
+									className="w-full mt-1 p-2 bg-black rounded"
+								>
+									<option value="">All</option>
+									<option value="pods">Pods</option>
+									<option value="devices">Devices</option>
+								</select>
+							</div>
+						)}
 						<div>
 							<label className="text-xs text-muted-foreground">Brand</label>
 							<select
@@ -245,6 +289,8 @@ export default function AdminPage() {
 							onClick={() => {
 								setBrandFilter("");
 								setInStockFilter("");
+								setCategoryFilter("");
+								setSubFilter("");
 								setMinPrice("");
 								setMaxPrice("");
 								fetchProducts(1);
@@ -263,6 +309,8 @@ export default function AdminPage() {
 									<th className="px-3 py-2">Title</th>
 									<th className="px-3 py-2">Brand</th>
 									<th className="px-3 py-2">Price</th>
+									<th className="px-3 py-2">Category</th>
+									<th className="px-3 py-2">Sub</th>
 									<th className="px-3 py-2">Stock</th>
 									<th className="px-3 py-2">ProductId</th>
 									<th className="px-3 py-2">Edit</th>
@@ -302,6 +350,8 @@ export default function AdminPage() {
 											<td className="px-3 py-2 align-top">
 												{formatCurrency(p.price)}
 											</td>
+											<td className="px-3 py-2 align-top capitalize">{p.category?.replace('-', ' ') || '-'}</td>
+											<td className="px-3 py-2 align-top capitalize">{p.subCategory || '-'}</td>
 											<td className="px-3 py-2 align-top">
 												{p.inStock ? "Yes" : "No"}
 											</td>
@@ -435,6 +485,35 @@ export default function AdminPage() {
 								will be removed from storage.
 							</p>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+								<div>
+									<label className="block text-sm md:text-base mb-1">Category</label>
+									<select
+										value={editProduct.category}
+										onChange={(e) => {
+											const cat = e.target.value as IProduct['category'];
+											setEditProduct({ ...editProduct, category: cat, subCategory: cat === 'pods-devices' ? editProduct.subCategory : undefined } as EditableProduct);
+										}}
+										className="p-3 bg-black rounded text-base md:text-lg w-full"
+									>
+										<option value="disposable">Disposable</option>
+										<option value="pods-devices">Pods & Devices</option>
+										<option value="e-liquids">E-liquids</option>
+									</select>
+								</div>
+								{editProduct.category === 'pods-devices' && (
+									<div>
+										<label className="block text-sm md:text-base mb-1">Subcategory</label>
+										<select
+											value={editProduct.subCategory || ''}
+											onChange={(e) => setEditProduct({ ...editProduct, subCategory: e.target.value as IProduct['subCategory'] } as EditableProduct)}
+											className="p-3 bg-black rounded text-base md:text-lg w-full"
+										>
+											<option value="">Select subcategory</option>
+											<option value="pods">Pods</option>
+											<option value="devices">Devices</option>
+										</select>
+									</div>
+								)}
 								<div>
 									<label className="block text-sm md:text-base mb-1">
 										Title

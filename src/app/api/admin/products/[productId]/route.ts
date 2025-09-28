@@ -45,9 +45,19 @@ export async function PUT(req: Request, context: any) {
     const body = await req.json();
     // Allow only specific fields to be updated
   const allowed: Record<string, unknown> = {};
-    ['title', 'briefDescription', 'brand', 'description', 'specification', 'image', 'imageKey', 'price', 'inStock'].forEach(k => {
+    ['title', 'briefDescription', 'brand', 'description', 'specification', 'image', 'imageKey', 'price', 'inStock', 'category', 'subCategory'].forEach(k => {
       if (body[k] !== undefined) allowed[k] = body[k];
     });
+    // enforce subCategory only when category is pods-devices
+    if (allowed['category'] !== 'pods-devices') {
+      delete allowed['subCategory'];
+    }
+    // if subCategory is present but category isn't pods-devices (existing doc), drop it
+    if (!allowed['category']) {
+      const current = await Product.findOne({ productId }).select({ category: 1 }).lean();
+      const currentCategory = (current as unknown as { category?: string })?.category;
+      if (currentCategory !== 'pods-devices') delete allowed['subCategory'];
+    }
     const updated = await Product.findOneAndUpdate({ productId }, { $set: allowed }, { new: true }).lean();
     if (!updated) return NextResponse.json({ ok: false, error: 'Not found' }, { status: 404 });
     return NextResponse.json({ ok: true, product: updated });

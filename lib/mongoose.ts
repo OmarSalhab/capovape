@@ -27,10 +27,13 @@ async function dbConnect() {
 	if (cached.conn) return cached.conn;
 
 	if (!cached.promise) {
-		const opts = {
+		const opts: mongoose.ConnectOptions = {
 			bufferCommands: false,
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
+			maxPoolSize: 10,
+			minPoolSize: 0,
+			serverSelectionTimeoutMS: 5000,
+			socketTimeoutMS: 20000,
+			family: 4,
 		};
 
 		cached.promise = mongoose

@@ -24,7 +24,7 @@ export default function VapeCard({
 			initial={{ opacity: 0, y: 8 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.35 }}
-			className="group rounded-md overflow-hidden shadow-lg"
+			className="group rounded-md overflow-hidden shadow-lg h-full flex flex-col"
 		>
 			<div
 				className="aspect-[4/5] relative overflow-hidden border border-[#222] bg-transparent"
@@ -53,11 +53,11 @@ export default function VapeCard({
 				</Link>
 			</div>
 
-			<div className="mt-3 px-1">
-				<h3 className="text-sm sm:text-lg font-cinzel tracking-wide text-[var(--color-mafia)] uppercase text-wrap overflow-ellipsis">
+			<div className="mt-3 px-1 flex-1 flex flex-col">
+				<h3 className="text-sm sm:text-lg font-cinzel tracking-wide text-[var(--color-mafia)] uppercase line-clamp-2 min-h-[3.25rem]">
 					{vape.title}
 				</h3>
-				<div className="mt-2 flex items-center justify-between">
+				<div className="flex items-center justify-between mt-auto">
 					<div className="text-sm sm:text-md sm:text-lg text-gray-100 font-medium font-serif">
 						{vape.price}
 					</div>

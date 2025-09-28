@@ -10,6 +10,8 @@ export const BRANDS: Brand[] = [
   { id: "geek", label: "Geek Bar" },
   { id: "drip'n-by-envi", label: "Drip'n by Envi" },
   { id: "breeze-prime", label: "Breeze Prime" },
+  { id: "vice", label: "Vice" },
+  { id: "uwell", label: "Uwell" }
 ];
 
 export const brandLabel = (id: string): string => BRANDS.find(b => b.id === id)?.label || id;

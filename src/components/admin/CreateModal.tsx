@@ -16,6 +16,8 @@ interface Product {
 	description?: string;
 	image?: string;
 	imageKey?: string;
+	category: 'disposable' | 'pods-devices' | 'e-liquids';
+	subCategory?: 'pods' | 'devices';
 }
 
 export default function CreateModal({
@@ -33,6 +35,7 @@ export default function CreateModal({
 		price: 0,
 		productId: "",
 		inStock: true,
+		category: 'disposable',
 	});
 	// track a temporary uploaded key so we can delete it if the user cancels
 	const [tempUploadedKey, setTempUploadedKey] = useState<string | null>(null);
@@ -57,6 +60,35 @@ export default function CreateModal({
 				</p>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+					<div>
+						<label className="block text-sm md:text-base mb-1">Category</label>
+						<select
+							value={newProduct.category || ''}
+							onChange={(e) => {
+								const cat = e.target.value as Product['category'];
+								setNewProduct({ ...newProduct, category: cat, subCategory: cat === 'pods-devices' ? newProduct.subCategory : undefined });
+							}}
+							className="p-3 bg-black rounded text-base md:text-lg w-full"
+						>
+							<option value="disposable">Disposable</option>
+							<option value="pods-devices">Pods & Devices</option>
+							<option value="e-liquids">E-liquids</option>
+						</select>
+					</div>
+					{newProduct.category === 'pods-devices' && (
+						<div>
+							<label className="block text-sm md:text-base mb-1">Subcategory</label>
+							<select
+								value={newProduct.subCategory || ''}
+								onChange={(e) => setNewProduct({ ...newProduct, subCategory: e.target.value as Product['subCategory'] })}
+								className="p-3 bg-black rounded text-base md:text-lg w-full"
+							>
+								<option value="">Select subcategory</option>
+								<option value="pods">Pods</option>
+								<option value="devices">Devices</option>
+							</select>
+						</div>
+					)}
 					<div>
 						<label className="block text-sm md:text-base mb-1">Title</label>
 						<input
@@ -357,7 +389,18 @@ export default function CreateModal({
 								specEntries.forEach((s) => {
 									if (s.k) specObj[s.k] = s.v;
 								});
-								const payload = { ...newProduct, specification: specObj };
+								// Basic validation: category required, subCategory required when category is pods-devices
+								if (!newProduct.category) {
+									addToast({ kind: 'error', message: 'Category is required' });
+									setCreatingBusy(false);
+									return;
+								}
+								if (newProduct.category === 'pods-devices' && !newProduct.subCategory) {
+									addToast({ kind: 'error', message: 'Please choose Pods or Devices' });
+									setCreatingBusy(false);
+									return;
+								}
+								const payload = { ...newProduct, specification: specObj, subCategory: newProduct.category === 'pods-devices' ? newProduct.subCategory : undefined };
 								const res = await fetch("/api/admin/products", {
 									method: "POST",
 									headers: { "Content-Type": "application/json" },

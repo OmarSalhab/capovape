@@ -13,7 +13,7 @@ type ProductFromApi = {
   inStock: boolean;
 };
 
-export default function BrandProductsClient({ brand }: { brand: string }) {
+export default function BrandProductsClient({ brand, category, sub }: { brand: string; category?: string; sub?: string }) {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<ProductFromApi[]>([]);
   const [page, setPage] = useState(1);
@@ -22,7 +22,12 @@ export default function BrandProductsClient({ brand }: { brand: string }) {
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    fetch(`/api/products?brand=${encodeURIComponent(brand)}&page=${page}`)
+    const params = new URLSearchParams();
+    params.set('brand', brand);
+    params.set('page', String(page));
+    if (category) params.set('category', category);
+    if (sub) params.set('sub', sub);
+    fetch(`/api/products?${params.toString()}`)
       .then((r) => r.json())
       .then((data) => {
         if (!mounted) return;
@@ -46,7 +51,7 @@ export default function BrandProductsClient({ brand }: { brand: string }) {
     return () => {
       mounted = false;
     };
-  }, [brand, page]);
+  }, [brand, category, sub, page]);
 
   return (
     <div>

@@ -5,6 +5,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Header";
 import { ToastProvider } from "@/components/ui/Toast";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const inter = Inter({
 	variable: "--font-inter",
@@ -32,6 +33,7 @@ export default function RootLayout({
 			<body className={`${inter.variable} ${geistMono.variable} antialiased`}>
 				<ToastProvider>
 					<Navigation />
+					<Breadcrumb />
 					{children}
 					<Footer />
 					<Analytics />

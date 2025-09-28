@@ -5,7 +5,9 @@ import Product from "../../../../models/Product";
 export async function GET(req: Request) {
 	try {
 		const url = new URL(req.url);
-		const brand = url.searchParams.get("brand");
+	const brand = url.searchParams.get("brand");
+	const category = url.searchParams.get("category");
+	const sub = url.searchParams.get("sub");
 		const productId = url.searchParams.get("productId");
 		const pageParam = parseInt(url.searchParams.get("page") || "1", 10) || 1;
 		const limit = parseInt(url.searchParams.get("limit") || "15", 10) || 15;
@@ -54,6 +56,10 @@ export async function GET(req: Request) {
 		}
 
 		const filter: Record<string, unknown> = {};
+		if (category) {
+			filter.category = category;
+			if (category === 'pods-devices' && sub) filter.subCategory = sub;
+		}
 		if (brand) filter.brand = brand;
 		if (inStockParam === "true") filter.inStock = true;
 		if (inStockParam === "false") filter.inStock = false;
@@ -81,6 +87,8 @@ export async function GET(req: Request) {
 				briefDescription: 1,
 				inStock: 1,
 				brand: 1,
+				category: 1,
+				subCategory: 1,
 			})
 			.lean();
 
