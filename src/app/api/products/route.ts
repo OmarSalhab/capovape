@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../../lib/mongoose";
 import Product from "../../../../models/Product";
+import { logger } from "../../../../lib/logger";
 
 export async function GET(req: Request) {
 	try {
@@ -15,21 +16,29 @@ export async function GET(req: Request) {
 		const minPriceParam = url.searchParams.get("minPrice");
 		const maxPriceParam = url.searchParams.get("maxPrice");
 
-		await dbConnect();
+		logger.debug("/api/products GET", { brand, category, sub, productId, pageParam, limit, inStockParam, minPriceParam, maxPriceParam });
+
+		const conn = await dbConnect();
+		logger.debug("dbConnect returned", { conn: !!conn });
 
 		if (productId) {
+			logger.debug("Looking up single product", { productId });
 			const product = await Product.findOne({ productId }).lean();
-			if (!product)
+			if (!product) {
+				logger.warn("Product not found", { productId });
 				return NextResponse.json(
 					{ ok: false, error: "Not found" },
 					{ status: 404 }
 				);
+			}
+			logger.info("Product found", { productId, title: product.title });
 			return NextResponse.json({ ok: true, product });
 		}
 
 		// Simple realtime search by title: ?q=partial
 		const q = url.searchParams.get("q")?.trim();
 		if (q) {
+			logger.debug("Search query", { q });
 			// Case-insensitive partial match on title
 			const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 			const matches = await Product.find({ title: regex })
@@ -45,6 +54,7 @@ export async function GET(req: Request) {
 					brand: 1,
 				})
 				.lean();
+			logger.info("Search results", { q, count: matches.length });
 			const res = NextResponse.json({
 				ok: true,
 				products: matches,
@@ -71,6 +81,7 @@ export async function GET(req: Request) {
 			filter.price = { ...((filter.price as object) || {}), $lte: maxPrice };
 
 		const total = await Product.countDocuments(filter);
+		logger.debug("CountDocuments result", { filter, total });
 		const totalPages = Math.max(1, Math.ceil(total / limit));
 		const page = Math.min(Math.max(1, pageParam), totalPages);
 		const skip = (page - 1) * limit;
@@ -91,6 +102,7 @@ export async function GET(req: Request) {
 				subCategory: 1,
 			})
 			.lean();
+		logger.info("Products query finished", { filter, returned: products.length, page, totalPages, total });
 
 		const res = NextResponse.json({
 			ok: true,
