@@ -15,7 +15,7 @@ export default async function DisposableVapesPage() {
     <BrandGrid
       title="Disposable Vapes"
       subtitle="Choose your house — tap a brand to explore"
-      basePath="/"
+      basePath="/disposable-vapes"
       brands={logos}
     />
   );
