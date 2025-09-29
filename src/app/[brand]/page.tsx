@@ -1,5 +1,25 @@
 import BrandVapeGrid from "@/components/BrandVapeGrid";
 import React, { Suspense } from "react";
+import type { Metadata } from 'next';
+import { brandLabel } from "@/lib/brands";
+
+const SITE = 'https://capovape.ca';
+const DEFAULT_IMAGE = '/capovape-logo.jpg';
+
+export async function generateMetadata({ params }: { params: Promise<{ brand: string }> }): Promise<Metadata> {
+	const { brand } = await params;
+	const label = brandLabel(brand);
+	const title = `${label} Vapes in Canada`;
+	const description = `Shop ${label} disposables, pods, devices and e‑liquids at CapoVape Canada.`;
+	const url = `${SITE}/${encodeURIComponent(brand)}`;
+	return {
+		title,
+		description,
+		alternates: { canonical: url },
+		openGraph: { url, title, description, images: [{ url: DEFAULT_IMAGE }] },
+		twitter: { card: 'summary_large_image', title, description, images: [DEFAULT_IMAGE] },
+	};
+}
 
 export default function BrandPage({
 	params,
