@@ -1,5 +1,6 @@
 import { Instagram } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
 	return (
@@ -35,19 +36,19 @@ export default function Footer() {
 					<ul className="mt-3 space-y-2 text-sm">
 						{" "}
 						<li>
-							<a className="hover:text-[#C5A66A]" href="#">
+							<a className="hover:text-[#C5A66A]" href="#brands">
 								All Products
 							</a>
 						</li>{" "}
 						<li>
-							<a className="hover:text-[#C5A66A]" href="#">
+							<Link className="hover:text-[#C5A66A]" href="/pods-devices">
 								Pods
-							</a>
+							</Link>
 						</li>{" "}
 						<li>
-							<a className="hover:text-[#C5A66A]" href="#">
+							<Link className="hover:text-[#C5A66A]" href="/disposable-vapes">
 								Disposables
-							</a>
+							</Link>
 						</li>{" "}
 					</ul>{" "}
 				</div>{" "}
@@ -81,9 +82,9 @@ export default function Footer() {
 						Contact
 					</h4>{" "}
 					<p className="mt-3 text-sm">
-						1851 Lawrence Avenue East, Scarborough, ON
+						1851 Lawrence Ave E, Scarborough, ON M1R 2Y3
 					</p>{" "}
-					<p className="text-sm">(416) 555-0123</p>{" "}
+					<p className="text-sm">437-473-5223</p>{" "}
 					<p className="text-sm">support@capovape.ca</p>{" "}
 				</div>{" "}
 			</div>{" "}

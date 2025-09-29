@@ -1,6 +1,6 @@
 export default function LocationSection() {
     // Replace the src in iframe with your Google Maps embed URL or use place_id + API if preferred
-    const mapSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.1234567890123!2d-79.3832!3d43.6532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0000000000000000!2sCapoVape!5e0!3m2!1sen!2sca!4v0000000000000";
+    const mapSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2698.5196724780153!2d-79.30264609999999!3d43.743284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cdfafbf60013%3A0x5de90d53138d418f!2sCapo%20Vape!5e1!3m2!1sen!2sjo!4v1759183505194!5m2!1sen!2sjo";
 
     return (
         <section id="location" className="py-12 md:py-20 bg-[#070707]">
@@ -27,19 +27,17 @@ export default function LocationSection() {
                             <div className="p-4 bg-black/30 border border-neutral-800 rounded-lg">
                                 <div className="text-sm text-neutral-300">Address</div>
                                 <div className="font-semibold text-white text-lg">CapoVape</div>
-                                <div className="text-neutral-300">123 King St W, Toronto, ON</div>
+                                <div className="text-neutral-300">Toronto, ON 1851 Lawrence Ave E, Scarborough, ON M1R 2Y3</div>
                             </div>
 
                             <div className="p-4 bg-black/30 border border-neutral-800 rounded-lg">
                                 <div className="text-sm text-neutral-300">Hours</div>
-                                <div className="text-neutral-300">Mon–Fri: 10:00 — 19:00</div>
-                                <div className="text-neutral-300">Sat: 11:00 — 18:00</div>
-                                <div className="text-neutral-300">Sun: Closed</div>
+                                <div className="text-neutral-300">Daily: 12:00 PM — 10:00 PM</div>
                             </div>
 
                             <div className="p-4 bg-black/30 border border-neutral-800 rounded-lg">
                                 <div className="text-sm text-neutral-300">Contact</div>
-                                <div className="text-neutral-300">Phone: (416) 555‑0100</div>
+                                <div className="text-neutral-300">Phone:437-473-5223</div>
                                 <div className="text-neutral-300">Email: hello@capovape.ca</div>
                             </div>
 

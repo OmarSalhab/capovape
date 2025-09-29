@@ -105,14 +105,14 @@ const Navigation = () => {
 							<span className="text-[#C5A66A]">
 								<Phone className="w-4 h-4" />
 							</span>{" "}
-							<span>(416) 555-0123</span> <span className="opacity-40">•</span>{" "}
+							<span>437-473-5223</span> <span className="opacity-40">•</span>{" "}
 							<span className="text-[#C5A66A]">WhatsApp</span>{" "}
-							<span>‪+1 416 555 0123‬</span>{" "}
+							<span>‪437-473-5223‬</span>{" "}
 						</div>{" "}
 						<div className="flex items-center gap-3">
 							{" "}
 							<span className="text-[#C5A66A]">Hours:</span>{" "}
-							<span>Mon–Sun 10:00–23:00</span>{" "}
+							<span>Daily 12:00 PM–10:00 PM</span>{" "}
 						</div>{" "}
 					</div>{" "}
 				</div>
