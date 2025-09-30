@@ -27,7 +27,7 @@ export default function LocationSection() {
                             <div className="p-4 bg-black/30 border border-neutral-800 rounded-lg">
                                 <div className="text-sm text-neutral-300">Address</div>
                                 <div className="font-semibold text-white text-lg">CapoVape</div>
-                                <div className="text-neutral-300">Toronto, ON 1851 Lawrence Ave E, Scarborough, ON M1R 2Y3</div>
+                                <div className="text-neutral-300">1851 Lawrence Ave E, Scarborough, ON M1R 2Y3</div>
                             </div>
 
                             <div className="p-4 bg-black/30 border border-neutral-800 rounded-lg">
@@ -38,7 +38,7 @@ export default function LocationSection() {
                             <div className="p-4 bg-black/30 border border-neutral-800 rounded-lg">
                                 <div className="text-sm text-neutral-300">Contact</div>
                                 <div className="text-neutral-300">Phone:437-473-5223</div>
-                                <div className="text-neutral-300">Email: hello@capovape.ca</div>
+                                <div className="text-neutral-300">Email: capovapeca@gmail.com</div>
                             </div>
 
                     

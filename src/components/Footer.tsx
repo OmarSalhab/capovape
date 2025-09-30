@@ -85,7 +85,7 @@ export default function Footer() {
 						1851 Lawrence Ave E, Scarborough, ON M1R 2Y3
 					</p>{" "}
 					<p className="text-sm">437-473-5223</p>{" "}
-					<p className="text-sm">support@capovape.ca</p>{" "}
+					<p className="text-sm">capovapeca@gmail.com</p>{" "}
 				</div>{" "}
 			</div>{" "}
 			<div className="py-4 text-center text-xs text-[#F4EDE0]/60">
