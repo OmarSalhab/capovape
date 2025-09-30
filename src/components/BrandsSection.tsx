@@ -58,7 +58,7 @@ export default function BrandsSection() {
 				<div className="mt-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6">
 					{cards.map((c) => (
 						<Link key={c.href} href={c.href} prefetch className="group relative block">
-							<div className={`relative overflow-hidden rounded-2xl ${c.bg} ${c.ring} p-8 md:p-10 transition-transform duration-300 group-hover:scale-[1.01]`}
+							<div className={`relative md:h-52 overflow-hidden rounded-2xl ${c.bg} ${c.ring} p-8 md:p-10 transition-transform duration-300 group-hover:scale-[1.01]`}
 								style={{ boxShadow: "0 8px 30px rgba(0,0,0,0.35)" }}
 							>
 								<div className="absolute -inset-6 opacity-20 blur-2xl" style={{ background: c.glow }} />
