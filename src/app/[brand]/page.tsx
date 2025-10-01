@@ -1,7 +1,8 @@
 import BrandVapeGrid from "@/components/BrandVapeGrid";
-import React, { Suspense } from "react";
+import React from "react";
 import type { Metadata } from 'next';
 import { brandLabel } from "@/lib/brands";
+import { ProductFromApi } from '@/components/BrandProductsClient';
 
 const SITE = 'https://capovape.ca';
 const DEFAULT_IMAGE = '/capovape-logo.jpg';
@@ -21,14 +22,15 @@ export async function generateMetadata({ params }: { params: Promise<{ brand: st
 	};
 }
 
-export default function BrandPage({
-	params,
-}: {
-	params: Promise<{ brand: string }>;
-}) {
-	// Next 15+ params is a promise; unwrap using React.use
-	const unwrapped = React.use(params);
-	const brand = unwrapped.brand;
+export default async function BrandPage({ params }: { params: Promise<{ brand: string }> }) {
+	const { brand } = await params;
+	const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+	const res = await fetch(
+		`${baseUrl}/api/products/disposable/${encodeURIComponent(brand)}`,
+		{ cache: 'force-cache' }
+	);
+	const data = await res.json();
+	const products: ProductFromApi[] = data.products || [];
 	return (
 		<section className="py-12">
 			<div className="mx-auto max-w-6xl px-4">
@@ -42,9 +44,7 @@ export default function BrandPage({
 						A curated selection &#8212; Capo&apos;s finest.
 					</p>
 				</header>
-			<Suspense fallback={<p>Loading...</p>}>
-				<BrandVapeGrid brand={brand} />
-			</Suspense>
+				<BrandVapeGrid products={products} />
 			</div>
 		</section>
 	);

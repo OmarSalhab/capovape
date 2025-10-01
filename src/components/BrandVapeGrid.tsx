@@ -1,11 +1,10 @@
 "use client";
-import BrandProductsClient from './BrandProductsClient';
+import BrandProductsClient, { ProductFromApi } from './BrandProductsClient';
 
-export default function BrandVapeGrid({ brand, category, sub }: { brand: string; category?: string; sub?: string }) {
+export default function BrandVapeGrid({ products }: { products: ProductFromApi[] }) {
 	return (
 		<div>
-			{/* Client-side fetch + skeleton + pagination */}
-			<BrandProductsClient brand={brand} category={category} sub={sub} />
+			<BrandProductsClient products={products} />
 		</div>
 	);
 }

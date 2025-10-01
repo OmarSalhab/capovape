@@ -1,7 +1,7 @@
 import BrandVapeGrid from "@/components/BrandVapeGrid";
-import React from "react";
 import type { Metadata } from 'next';
 import { brandLabel } from "@/lib/brands";
+import { ProductFromApi } from '@/components/BrandProductsClient';
 
 const SITE = 'https://capovape.ca';
 const DEFAULT_IMAGE = '/capovape-logo.jpg';
@@ -21,8 +21,16 @@ export async function generateMetadata({ params }: { params: Promise<{ brand: st
   };
 }
 
-export default function PodsBrandPage({ params }: { params: Promise<{ brand: string }> }) {
-  const { brand } = React.use(params);
+export default async function PodsBrandPage({ params }: { params: Promise<{ brand: string }>}) {
+  const { brand } =await params;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const res = await fetch(
+    `${baseUrl}/api/products/pods/${encodeURIComponent(brand)}`,
+    { cache: 'force-cache' }
+  );
+  const data = await res.json();
+  const products: ProductFromApi[] = data.products || [];
+
   return (
     <section className="py-12">
       <div className="mx-auto max-w-6xl px-4">
@@ -32,7 +40,7 @@ export default function PodsBrandPage({ params }: { params: Promise<{ brand: str
           </h1>
           <p className="mt-2 text-muted-foreground">A curated selection — Capo&apos;s finest.</p>
         </header>
-        <BrandVapeGrid brand={brand} category="pods-devices" sub="pods" />
+        <BrandVapeGrid products={products} />
       </div>
     </section>
   );
