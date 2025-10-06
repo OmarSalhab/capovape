@@ -13,7 +13,7 @@ const HeroSlider = () => {
 		{
 			id: 1,
 			image:
-				"/ChatGPT Image Oct 6, 2025, 04_01_40 PM.png",
+				"/offer.webp",
 		},
 	];
 
@@ -91,7 +91,7 @@ const HeroSlider = () => {
 									alt="offers"
 									width={600}
 									height={240}
-									className="w-full h-full object-fill object-center opacity-60"
+									className="w-full h-full object-fill object-center "
 								/>
 							</div>
 						))}
