@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
+// import Image from "next/image";
 
 const HeroSlider = () => {
 	const [currentSlide, setCurrentSlide] = useState(0);
@@ -86,11 +86,9 @@ const HeroSlider = () => {
 									height={288}
 									className="object-fit h-72 w-full"
 								/> */}
-								<Image
+								<img
 									src={slide.image}
 									alt="offers"
-									width={600}
-									height={240}
 									className="w-full h-full object-fill object-center "
 								/>
 							</div>
