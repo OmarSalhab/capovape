@@ -17,6 +17,7 @@ export default function VapeCard({
 }: {
 	vape: Vape;
 	brand: string;
+	
 }) {
 	return (
 		<motion.article

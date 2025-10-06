@@ -13,15 +13,7 @@ const HeroSlider = () => {
 		{
 			id: 1,
 			image:
-				"/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
-		},
-		{
-			id: 2,
-			image: "/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
-		},
-		{
-			id: 3,
-			image: "/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
+				"/ChatGPT Image Oct 6, 2025, 04_01_40 PM.png",
 		},
 	];
 
@@ -99,7 +91,7 @@ const HeroSlider = () => {
 									alt="offers"
 									width={600}
 									height={240}
-									className="w-full h-full object-contain object-center opacity-60"
+									className="w-full h-full object-fill object-center opacity-60"
 								/>
 							</div>
 						))}
