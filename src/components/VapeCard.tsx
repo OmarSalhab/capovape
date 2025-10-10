@@ -17,7 +17,6 @@ export default function VapeCard({
 }: {
 	vape: Vape;
 	brand: string;
-	
 }) {
 	return (
 		<motion.article
@@ -27,28 +26,31 @@ export default function VapeCard({
 			transition={{ duration: 0.35 }}
 			className="group rounded-md overflow-hidden shadow-lg h-full flex flex-col"
 		>
-			<div
-				className="aspect-[4/5] relative overflow-hidden border border-[#222] bg-transparent"
-			>
+			<div className="aspect-[4/5] relative overflow-hidden border border-[#222] bg-transparent">
 				{/* Out of stock sticker */}
 				{vape.inStock === false && (
 					<div className="absolute z-20 mt-1 ml-1 font-mono transform  bg-red-700 text-white px-2 py-1 md:px-3 md:py-1 text-xs font-semibold rounded shadow-lg">
 						OUT OF STOCK
 					</div>
 				)}
-				<Link href={`/${brand}/${vape.id}`} className="block w-full h-full" prefetch={true}>
+				<Link
+					href={`/${brand}/${vape.id}`}
+					className="block w-full h-full"
+					prefetch={true}
+				>
 					<div className="w-full h-full relative">
 						{vape.image ? (
-							<Image
+							<img
 								src={vape.image}
 								alt={vape.title}
-								fill
 								loading="lazy"
 								className="object-cover"
 								sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
 							/>
 						) : (
-							<div className="w-full h-full bg-[#111] flex items-center justify-center text-xs text-muted-foreground">No image</div>
+							<div className="w-full h-full bg-[#111] flex items-center justify-center text-xs text-muted-foreground">
+								No image
+							</div>
 						)}
 					</div>
 				</Link>

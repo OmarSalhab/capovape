@@ -62,11 +62,9 @@ export default function BrandGrid({
 									}}
 								>
 									<div className="rounded-full h-full w-full bg-black/80 grid place-items-center border border-[#3a2f15]">
-										<Image
+										<img
 											src={brand.image}
 											alt={label}
-											width={200}
-											height={200}
 											loading="lazy"
 											className="w-20 h-20 md:w-24 md:h-24 object-contain opacity-90 group-hover:opacity-100 transition mix-blend-screen"
 										/>

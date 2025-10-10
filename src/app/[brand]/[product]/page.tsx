@@ -89,7 +89,7 @@ export default async function VapeDetail({ params }: { params: Promise<{ product
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-20 items-start">
           <div className="w-full">
             <div className="w-full bg-black/60 rounded-md  flex items-center justify-center">
-              <Image src={product.image || '/capovape-logo.jpg'} alt={product.title} width={640} height={640} className="object-fill max-h-[70vh]" />
+              <img src={product.image || '/capovape-logo.jpg'} alt={product.title} sizes="(max-width: 640px) 90vw, 640px" className="object-fill max-h-[70vh]" />
             </div>
           </div>
 

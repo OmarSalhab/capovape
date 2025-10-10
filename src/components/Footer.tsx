@@ -12,7 +12,7 @@ export default function Footer() {
 					{" "}
 					<div className="flex items-center gap-3">
 						{" "}
-						<Image src="/favicon.ico" alt="Capo Logo" width={100} height={70} />
+						<img src="/favicon.ico" alt="Capo Logo" className="w-26 h-16" />
 					</div>{" "}
 					<p className="mt-3 text-sm mb-4">
 						Premium devices. No-nonsense service.
