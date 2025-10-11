@@ -11,7 +11,9 @@ export const BRANDS: Brand[] = [
   { id: "drip'n-by-envi", label: "Drip'n by Envi" },
   { id: "breeze-prime", label: "Breeze Prime" },
   { id: "vice", label: "Vice" },
-  { id: "uwell", label: "Uwell" }
+  { id: "uwell", label: "Uwell" },
+  { id: "kraze-luna", label: "Kraze Luna" },
+  { id: "level-x", label: "Level X" }
 ];
 
 export const brandLabel = (id: string): string => BRANDS.find(b => b.id === id)?.label || id;

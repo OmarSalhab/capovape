@@ -1,6 +1,7 @@
 "use client";
 import VapeCard from './VapeCard';
 
+
 export type ProductFromApi = {
   productId: string;
   title: string;

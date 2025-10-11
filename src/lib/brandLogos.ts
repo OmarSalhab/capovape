@@ -11,5 +11,7 @@ export const BRAND_LOGOS: BrandLogo[] = [
   { id: "breeze-prime", image: "/6ef63b_ef0c16d16a5b43c8a41c37e598d8646c~mv2.webp" },
   { id: "elf-bar", image: "/ELFBAR.webp" },
   { id: "vice", image: "/VICE_-_Logo_1.webp" },
-  { id: "uwell", image: "/uwell-797588.webp" }
+  { id: "uwell", image: "/uwell-797588.webp" },
+  { id: "kraze-luna", image: "/Kraze_Logo_White.webp" },
+  { id: "level-x", image: "/Untitled_design_-_2023-08-14T161415.118.png" }
 ];
