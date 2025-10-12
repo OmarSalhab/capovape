@@ -13,7 +13,7 @@ const HeroSlider = () => {
 		{
 			id: 1,
 			image:
-				"/offer.webp",
+				"/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
 		},
 	];
 
