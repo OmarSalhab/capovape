@@ -15,6 +15,16 @@ const HeroSlider = () => {
 			image:
 				"/nic_warning_mobile_82fcaa6f-dab0-41b9-89a3-bde10b0370c5.webp",
 		},
+		{
+			id: 2,
+			image:
+				"/WhatsApp Image 2025-10-13 at 00.47.08_12f3c9c2.jpg",
+		},
+		{
+			id: 3,
+			image:
+				"/WhatsApp Image 2025-10-13 at 00.47.08_b28a5757.jpg",
+		}
 	];
 
 	const nextSlide = useCallback(() => {
